@@ -50,6 +50,7 @@ typedef void(^SCRecordingSaveViewControllerCompletionHandler)(NSDictionary *trac
 - (void)setFileData:(NSData *)someFileData;
 
 - (void)setPrivate:(BOOL)isPrivate;
+- (void)setDownloadable:(BOOL)isDownloadable;
 - (void)setCoverImage:(UIImage *)aCoverImage;
 - (void)setTitle:(NSString *)aTitle;
 - (void)setCreationDate:(NSDate *)aCreationDate;
