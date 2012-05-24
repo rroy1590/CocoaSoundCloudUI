@@ -63,6 +63,7 @@
 @property (nonatomic, retain) NSURL *fileURL;
 @property (nonatomic, retain) NSData *fileData;
 @property (nonatomic, assign) BOOL isPrivate;
+@property (nonatomic, assign) BOOL isDownloadable;
 @property (nonatomic, retain) UIImage *coverImage;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSDate *trackCreationDate;
@@ -180,6 +181,7 @@ const NSArray *allServices = nil;
 @synthesize fileURL;
 @synthesize fileData;
 @synthesize isPrivate;
+@synthesize isDownloadable;
 @synthesize coverImage;
 @synthesize title;
 @synthesize trackCreationDate;
@@ -218,6 +220,7 @@ const NSArray *allServices = nil;
         sharingMailAddresses = [[NSArray alloc] init];
         
         isPrivate = [[NSUserDefaults standardUserDefaults] boolForKey:SCDefaultsKeyRecordingIsPrivate];
+        isDownloadable = YES;
         location = nil;
         locationTitle = nil;
         foursquareID = nil;
@@ -372,6 +375,11 @@ const NSArray *allServices = nil;
 - (void)setPrivate:(BOOL)p;
 {
     isPrivate = p;
+}
+
+- (void)setDownloadable:(BOOL)value;
+{
+    isDownloadable = value;
 }
 
 - (void)setCoverImage:(UIImage *)aCoverImage;
@@ -1240,9 +1248,9 @@ const NSArray *allServices = nil;
     // metadata
     [parameters setObject:[self generatedTitle] forKey:@"track[title]"];
     [parameters setObject:(self.isPrivate) ? @"private" : @"public" forKey: @"track[sharing]"];
+    [parameters setObject:(self.isDownloadable) ? @"1" : @"0" forKey: @"track[downloadable]"];
     [parameters setObject:[self generatedSharingNote] forKey:@"track[sharing_note]"];
-	[parameters setObject:@"recording" forKey:@"track[track_type]"];
-	[parameters setObject:@"1" forKey:@"track[downloadable]"];
+    [parameters setObject:@"recording" forKey:@"track[track_type]"];
 
     // sharing
     if (self.isPrivate) {
