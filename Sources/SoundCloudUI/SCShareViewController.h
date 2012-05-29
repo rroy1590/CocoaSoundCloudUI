@@ -34,6 +34,7 @@ typedef void(^SCSharingViewControllerComletionHandler)(NSDictionary *trackInfo, 
 #pragma mark Accessors
 
 - (void)setPrivate:(BOOL)isPrivate;
+- (void)setDownloadable:(BOOL)downloadable;
 - (void)setCoverImage:(UIImage *)aCoverImage;
 - (void)setTitle:(NSString *)aTitle;
 - (void)setCreationDate:(NSDate *)aDate;

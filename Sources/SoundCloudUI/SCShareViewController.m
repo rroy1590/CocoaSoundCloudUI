@@ -70,6 +70,11 @@
     [self.recordSaveController setPrivate:isPrivate];
 }
 
+- (void)setDownloadable:(BOOL)downloadable;
+{
+    [self.recordSaveController setDownloadable:downloadable];
+}
+
 - (void)setCoverImage:(UIImage *)aCoverImage;
 {
     [self.recordSaveController setCoverImage:aCoverImage];
