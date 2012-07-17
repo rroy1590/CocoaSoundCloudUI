@@ -359,11 +359,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation;
 {
-    return YES;
-    if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
+    if ([UIDevice isIPad]) {
         return YES;
+        
+    } else {
+        return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
     }
-    return NO;
 }
 
 #pragma mark UITextFieldDelegate

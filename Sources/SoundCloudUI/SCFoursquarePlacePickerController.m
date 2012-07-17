@@ -22,6 +22,7 @@
 
 #import "NSData+SoundCloudUI.h"
 #import "UIColor+SoundCloudUI.h"
+#import "UIDevice+SoundCloudUI.h"
 
 #import "SCConstants.h"
 #import "SCBundle.h"
@@ -155,7 +156,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation;
 {
-    return YES;
+    if ([UIDevice isIPad]) {
+        return YES;
+        
+    } else {
+        return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+    }
 }
 
 
