@@ -19,6 +19,7 @@
  */
 
 #import "UIViewController+SoundCloudUI.h"
+#import "UIDevice+SoundCloudUI.h"
 
 #import "SCLoginView.h"
 #import "SCConnectToSoundCloudTitleView.h"
@@ -141,7 +142,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation;
 {
-    return[[self modalPresentingViewController] shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
+    if ([UIDevice isIPad]) {
+        return YES;
+        
+    } else {
+        return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+    }
 }
 
 #pragma mark Notifications
