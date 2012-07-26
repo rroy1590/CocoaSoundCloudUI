@@ -24,9 +24,14 @@
 
 - (UIViewController *)modalPresentingViewController;
 {
+    // override the warning here since presentingViewController
+    // just returns a pointer
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     SEL presenting = NSSelectorFromString(@"presentingViewController");
     if ([self respondsToSelector:presenting]) {
         return [self performSelector:presenting];
+#pragma clang diagnostic pop
     }
     else {
         return self.parentViewController;

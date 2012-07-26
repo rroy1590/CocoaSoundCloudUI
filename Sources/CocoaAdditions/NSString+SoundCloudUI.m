@@ -42,7 +42,7 @@
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
 	CFRelease(theUUID);
 	
-    return [(NSString *)string autorelease];
+    return (NSString *)CFBridgingRelease(string);
 }
 
 #pragma mark NSTimeInterval
@@ -132,33 +132,30 @@
 
 - (NSString *)stringByUnescapingXMLEntities;
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSString *returnValue = [self stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&quot;" withString:@"\""];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&#39;" withString:@"'"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"auml;" withString:@"ä"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&Auml;" withString:@"Ä"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&ouml;" withString:@"ö"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&Ouml;" withString:@"Ö"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&uuml;" withString:@"ü"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&Üuml;" withString:@"Ü"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&szlig;" withString:@"ß"];
-	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];	
-	
-	[returnValue retain];
-	[pool release];
-	[returnValue autorelease];
+    NSString *returnValue = nil;
+    @autoreleasepool {
+        returnValue = [self stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&quot;" withString:@"\""];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&#39;" withString:@"'"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"auml;" withString:@"ä"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&Auml;" withString:@"Ä"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&ouml;" withString:@"ö"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&Ouml;" withString:@"Ö"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&uuml;" withString:@"ü"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&Üuml;" withString:@"Ü"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&szlig;" withString:@"ß"];
+        returnValue = [returnValue stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+    }
 	return returnValue;
 }
 
 - (NSString *)stringByEscapingXMLEntities;
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	NSString *returnValue = [self stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];
+    NSString *returnValue = nil;
+    @autoreleasepool {
+	returnValue = [self stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];
 	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"\"" withString:@"&quot;"];
 	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"'" withString:@"&#39;"];
 	returnValue = [returnValue stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
@@ -171,29 +168,26 @@
 	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"Ü" withString:@"&Üuml;"];
 	returnValue = [returnValue stringByReplacingOccurrencesOfString:@"ß" withString:@"&szlig;"];
 	returnValue = [returnValue stringByReplacingOccurrencesOfString:@" " withString:@"&nbsp;"];	
-	
-	[returnValue retain];
-	[pool release];
-	[returnValue autorelease];
-	return returnValue;
+    }
+    return returnValue;
 }
 
 - (NSString *)stringByAddingURLEncoding;
 {
 	CFStringRef returnValue = CFURLCreateStringByAddingPercentEscapes (kCFAllocatorDefault, //Allocator
-																	   (CFStringRef)self, //Original String
+																	   (__bridge CFStringRef)self, //Original String
 																	   NULL, //Characters to leave unescaped
 																	   (CFStringRef)@"!*'();:@&=+$,/?%#[]", //Legal Characters to be escaped
 																	   kCFStringEncodingUTF8); //Encoding
-	return [(NSString *)returnValue autorelease];
+	return (NSString *)CFBridgingRelease(returnValue);
 }
 
 - (NSString *)stringByRemovingURLEncoding;
 {
 	CFStringRef returnValue = CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, //Allocator
-																		 (CFStringRef)self,
+																		 (__bridge CFStringRef)self,
 																		 nil);
-	return [(NSString *)returnValue autorelease];
+	return (NSString *)CFBridgingRelease(returnValue);
 }
 
 

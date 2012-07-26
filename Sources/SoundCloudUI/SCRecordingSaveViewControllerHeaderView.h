@@ -24,14 +24,14 @@
 
 #pragma mark Accessors
 
-@property (nonatomic, readonly, assign) UIButton *logoutButton;
-@property (nonatomic, readonly, assign) UIButton *coverImageButton;
-@property (nonatomic, readonly, assign) UIButton *disclosureButton;
+@property (nonatomic, readonly, unsafe_unretained) UIButton *logoutButton;
+@property (nonatomic, readonly, unsafe_unretained) UIButton *coverImageButton;
+@property (nonatomic, readonly, unsafe_unretained) UIButton *disclosureButton;
 
-@property (nonatomic, readonly, assign) SCSwitch *privateSwitch;
+@property (nonatomic, readonly, unsafe_unretained) SCSwitch *privateSwitch;
 
-@property (nonatomic, readonly, assign) UITextField *whatTextField;
-@property (nonatomic, readonly, assign) UITextField *whereTextField;
+@property (nonatomic, readonly, unsafe_unretained) UITextField *whatTextField;
+@property (nonatomic, readonly, unsafe_unretained) UITextField *whereTextField;
 
 - (void)setAvatarImage:(UIImage *)anImage;
 - (void)setUserName:(NSString *)aUserName;

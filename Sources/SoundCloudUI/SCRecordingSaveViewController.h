@@ -38,7 +38,7 @@ typedef void(^SCRecordingSaveViewControllerCompletionHandler)(NSDictionary *trac
                                                              SCFoursquarePlacePickerControllerDelegate,
                                                              SCAddConnectionViewControllerDelegate> {
     
-    IBOutlet UITableView *tableView;
+    IBOutlet UITableView *__unsafe_unretained tableView;
     IBOutlet UIToolbar *toolbar;
                                 
     NSBundle *resourceBundle;

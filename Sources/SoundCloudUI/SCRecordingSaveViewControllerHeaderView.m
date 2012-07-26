@@ -50,17 +50,17 @@
 - (void)commonAwake;
 
 #pragma mark Accessors
-@property (nonatomic, readwrite, assign) SCHorizontalLineView *firstHR;
-@property (nonatomic, readwrite, assign) SCHorizontalLineView *secondHR;
-@property (nonatomic, readwrite, assign) UIImageView *avatarImageView;
-@property (nonatomic, readwrite, assign) UILabel *userNameLabel;
-@property (nonatomic, readwrite, assign) UIButton *logoutButton;
-@property (nonatomic, readwrite, assign) UIView *logoutSeparator;
-@property (nonatomic, readwrite, assign) UIButton *coverImageButton;
-@property (nonatomic, readwrite, assign) UITextField *whatTextField;
-@property (nonatomic, readwrite, assign) UITextField *whereTextField;
-@property (nonatomic, readwrite, assign) UIButton *disclosureButton;
-@property (nonatomic, readwrite, assign) SCSwitch *privateSwitch;
+@property (nonatomic, readwrite, unsafe_unretained) SCHorizontalLineView *firstHR;
+@property (nonatomic, readwrite, unsafe_unretained) SCHorizontalLineView *secondHR;
+@property (nonatomic, readwrite, unsafe_unretained) UIImageView *avatarImageView;
+@property (nonatomic, readwrite, unsafe_unretained) UILabel *userNameLabel;
+@property (nonatomic, readwrite, unsafe_unretained) UIButton *logoutButton;
+@property (nonatomic, readwrite, unsafe_unretained) UIView *logoutSeparator;
+@property (nonatomic, readwrite, unsafe_unretained) UIButton *coverImageButton;
+@property (nonatomic, readwrite, unsafe_unretained) UITextField *whatTextField;
+@property (nonatomic, readwrite, unsafe_unretained) UITextField *whereTextField;
+@property (nonatomic, readwrite, unsafe_unretained) UIButton *disclosureButton;
+@property (nonatomic, readwrite, unsafe_unretained) SCSwitch *privateSwitch;
 
 @property (nonatomic, readonly) CGRect textRect;
 
@@ -95,17 +95,17 @@
     self.backgroundColor = [UIColor clearColor]; 
     
     // Horizontal Lines
-    self.firstHR = [[[SCHorizontalLineView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.firstHR = [[SCHorizontalLineView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     [self addSubview:self.firstHR];
-    self.secondHR = [[[SCHorizontalLineView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.secondHR = [[SCHorizontalLineView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     [self addSubview:self.secondHR];
     
     // Avatar Image
-    self.avatarImageView = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     [self addSubview:self.avatarImageView];
 
     // User Name
-    self.userNameLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.userNameLabel.opaque = NO;
     self.userNameLabel.backgroundColor = [UIColor clearColor];
     self.userNameLabel.textColor = [UIColor whiteColor];
@@ -113,12 +113,12 @@
     [self addSubview:self.userNameLabel];
 
     // Separator
-    self.logoutSeparator =  [[[UIView alloc] init] autorelease];
+    self.logoutSeparator =  [[UIView alloc] init];
     self.logoutSeparator.backgroundColor = [UIColor blackColor];
     [self addSubview:self.logoutSeparator];
     
     // Logout Button
-    self.logoutButton = [[[SCUnderlinedButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.logoutButton = [[SCUnderlinedButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.logoutButton.backgroundColor = [UIColor clearColor];
     self.logoutButton.titleLabel.textColor = [UIColor whiteColor];
     self.logoutButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
@@ -128,7 +128,7 @@
     [self addSubview:self.logoutButton];
     
     // Cover Image
-    self.coverImageButton = [[[SCCoverImageButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.coverImageButton = [[SCCoverImageButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.coverImageButton.opaque = NO;
     self.coverImageButton.titleLabel.lineBreakMode = UILineBreakModeWordWrap;
     self.coverImageButton.titleLabel.textAlignment = UITextAlignmentCenter;
@@ -137,7 +137,7 @@
     [self addSubview:self.coverImageButton];
     
     // What
-    self.whatTextField = [[[SCTextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.whatTextField = [[SCTextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.whatTextField.opaque = NO;
     self.whatTextField.textAlignment = UITextAlignmentLeft;
     self.whatTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -149,7 +149,7 @@
     [self addSubview:self.whatTextField];
     
     // Where
-    self.whereTextField = [[[SCTextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.whereTextField = [[SCTextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.whereTextField.opaque = NO;
     self.whereTextField.textAlignment = UITextAlignmentLeft;
     self.whereTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -161,14 +161,14 @@
     [self addSubview:self.whereTextField];
     
     // Disclosure Indicator
-    self.disclosureButton = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.disclosureButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     [self.disclosureButton setImage:[SCBundle imageWithName:@"DisclosureIndicator"] forState:UIControlStateNormal];
     [self.disclosureButton sizeToFit];
     [self.disclosureButton setShowsTouchWhenHighlighted:NO];
     [self addSubview:self.disclosureButton];
     
     // Privacy Switch
-    self.privateSwitch = [[[SCSwitch alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+    self.privateSwitch = [[SCSwitch alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.privateSwitch.onText = SCLocalizedString(@"sc_upload_public", @"Public");
     self.privateSwitch.offText = SCLocalizedString(@"sc_upload_private", @"Private");
     [self addSubview:self.privateSwitch];
@@ -181,7 +181,6 @@
 - (void)dealloc;
 {
     self.avatarImageView = nil;
-    [super dealloc];
 }
 
 #pragma mark Accessors

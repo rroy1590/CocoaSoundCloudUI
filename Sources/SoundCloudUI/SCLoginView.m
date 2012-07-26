@@ -27,8 +27,8 @@
 
 
 @interface SCLoginView () <UIWebViewDelegate>
-@property (nonatomic, readwrite, assign) UIWebView *webView;
-@property (nonatomic, readwrite, assign) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, readwrite, unsafe_unretained) UIWebView *webView;
+@property (nonatomic, readwrite, unsafe_unretained) UIActivityIndicatorView *activityIndicator;
 - (void)commonAwake;
 @end
 
@@ -47,12 +47,12 @@
 {    
     self.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     
-    self.activityIndicator = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 	self.activityIndicator.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleBottomMargin);
 	self.activityIndicator.hidesWhenStopped = YES;
 	[self addSubview:self.activityIndicator];
  
-    self.webView = [[[UIWebView alloc] initWithFrame:self.bounds] autorelease];
+    self.webView = [[UIWebView alloc] initWithFrame:self.bounds];
     self.webView.delegate = self;
     self.webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.webView.backgroundColor = nil;
@@ -62,10 +62,6 @@
     self.backgroundColor = [UIColor colorWithPatternImage:[SCBundle imageWithName:@"darkTexturedBackgroundPattern"]];
 }
 
-- (void)dealloc;
-{
-    [super dealloc];
-}
 
 #pragma mark View
 

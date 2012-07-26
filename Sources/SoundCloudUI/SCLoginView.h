@@ -23,7 +23,7 @@
 #pragma mark -
 
 @interface SCLoginView : UIView
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, unsafe_unretained) id delegate;
 - (void)loadURL:(NSURL *)aURL;
 @end
 
