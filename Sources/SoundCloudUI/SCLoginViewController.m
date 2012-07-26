@@ -174,7 +174,7 @@
 
 #pragma mark Private
 
-- (IBAction)cancel;
+- (void)cancel;
 {   
     if (self.completionHandler) {
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Canceled by user." forKey:NSLocalizedDescriptionKey];
