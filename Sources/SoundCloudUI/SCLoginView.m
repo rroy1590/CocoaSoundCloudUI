@@ -93,7 +93,7 @@
 }
 
 #pragma mark WebView Delegate
-
+ 
 - (void)webViewDidStartLoad:(UIWebView *)webView;
 {
     [self.activityIndicator startAnimating];
@@ -105,22 +105,9 @@
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
-{    
-    switch (navigationType) {
-        case UIWebViewNavigationTypeLinkClicked:
-        {
-            [[UIApplication sharedApplication] openURL:request.URL];
-            return NO;
-        }
-            
-        default:
-        {
-            if ([SCSoundCloud handleRedirectURL:request.URL]) {
-                return NO;
-            }
-            return YES;
-        }
-    }
+{
+    [SCSoundCloud handleRedirectURL:request.URL];
+    return YES;
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error;
