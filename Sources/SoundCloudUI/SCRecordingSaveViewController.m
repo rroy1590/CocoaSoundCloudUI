@@ -128,7 +128,6 @@
 
 #pragma mark Helpers
 - (NSString *)generatedTitle;
-- (NSString *)generatedSharingNote;
 - (NSString *)dateString;
 - (float)cellMargin;
 
@@ -1249,7 +1248,6 @@ const NSArray *allServices = nil;
     [parameters setObject:[self generatedTitle] forKey:@"track[title]"];
     [parameters setObject:(self.isPrivate) ? @"private" : @"public" forKey: @"track[sharing]"];
     [parameters setObject:(self.isDownloadable) ? @"1" : @"0" forKey: @"track[downloadable]"];
-    [parameters setObject:[self generatedSharingNote] forKey:@"track[sharing_note]"];
     [parameters setObject:@"recording" forKey:@"track[track_type]"];
 
     // sharing
@@ -1524,30 +1522,6 @@ const NSArray *allServices = nil;
             return [NSString stringWithFormat:SCLocalizedString(@"recording_from_data", @"Sounds from %@"), [self dateString]];
         }
     }
-}
-
-- (NSString *)generatedSharingNote;
-{
-    NSString *note = self.customSharingNote;
-    if (note) {
-        return note;
-    }
-    
-    if (self.title.length > 0) {
-        if (self.locationTitle.length > 0) {
-            note = [NSString stringWithFormat:SCLocalizedString(@"recording_title_at_location_name", @"%@ at %@"), self.title, self.locationTitle];
-        } else {
-            note = self.title;
-        }
-    } else {
-        if (self.locationTitle.length > 0) {
-            note = [NSString stringWithFormat:SCLocalizedString(@"recording_at_location", @"Sounds at %@"), self.locationTitle];
-        } else {
-            note = [NSString stringWithFormat:SCLocalizedString(@"recording_from_data", @"Sounds from %@"), [self dateString]];
-        }
-    }
-    
-    return note;
 }
 
 - (NSString *)dateString;
