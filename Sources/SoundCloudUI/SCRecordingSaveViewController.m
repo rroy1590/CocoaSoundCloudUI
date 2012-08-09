@@ -1284,7 +1284,7 @@ const NSArray *allServices = nil;
     
     // tags (location)
     NSMutableArray *tags = [NSMutableArray array];
-    [tags addObject:[NSString stringWithFormat:@"soundcloud:source=%@", appName]];
+    [tags addObject:[NSString stringWithFormat:@"\"soundcloud:source=%@\"", appName]];
     if (self.location) {
         [tags addObject:[NSString stringWithFormat:@"geo:lat=%f", self.location.coordinate.latitude]];
         [tags addObject:[NSString stringWithFormat:@"geo:lon=%f", self.location.coordinate.longitude]];
