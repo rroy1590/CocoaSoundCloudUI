@@ -38,12 +38,12 @@
 #pragma mark -
 
 @interface SCLoginViewController ()
-- (id)initWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerComletionHandler)aCompletionHandler;
+- (id)initWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerCompletionHandler)aCompletionHandler;
 
 #pragma mark Accessors
 @property (nonatomic, retain) NSURL *preparedURL;
 @property (nonatomic, assign) SCLoginView *loginView;
-@property (nonatomic, copy) SCLoginViewControllerComletionHandler completionHandler;
+@property (nonatomic, copy) SCLoginViewControllerCompletionHandler completionHandler;
 
 #pragma mark Notifications
 - (void)accountDidChange:(NSNotification *)aNotification;
@@ -59,7 +59,7 @@
 
 #pragma mark Class Methods
 
-+ (id)loginViewControllerWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerComletionHandler)aCompletionHandler;
++ (id)loginViewControllerWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerCompletionHandler)aCompletionHandler;
 {
     
     SCLoginViewController *loginViewController = [[[self alloc] initWithPreparedURL:anURL completionHandler:aCompletionHandler] autorelease];
@@ -75,7 +75,7 @@
 @synthesize loginView;
 @synthesize completionHandler;
 
-- (id)initWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerComletionHandler)aCompletionHandler;
+- (id)initWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerCompletionHandler)aCompletionHandler;
 {
     self = [super init];
     if (self) {
