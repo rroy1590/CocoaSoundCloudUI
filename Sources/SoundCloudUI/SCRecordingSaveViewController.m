@@ -1248,6 +1248,9 @@ const NSArray *allServices = nil;
     [parameters setObject:[self generatedTitle] forKey:@"track[title]"];
     [parameters setObject:(self.isPrivate) ? @"private" : @"public" forKey: @"track[sharing]"];
     [parameters setObject:(self.isDownloadable) ? @"1" : @"0" forKey: @"track[downloadable]"];
+    if ([self.customSharingNote length] > 0) {
+        [parameters setObject:self.customSharingNote forKey:@"track[sharing_note]"];	
+    }
     [parameters setObject:@"recording" forKey:@"track[track_type]"];
 
     // sharing
