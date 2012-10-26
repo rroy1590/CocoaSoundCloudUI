@@ -69,6 +69,7 @@
 @property (nonatomic, retain) NSDate *trackCreationDate;
 @property (nonatomic, retain) NSArray *customTags;
 @property (nonatomic, retain) NSString *customSharingNote;
+@property (nonatomic, retain) NSString *trackDescription;
 
 @property (nonatomic, retain) CLLocation *location;
 @property (nonatomic, copy) NSString *locationTitle;
@@ -186,6 +187,7 @@ const NSArray *allServices = nil;
 @synthesize trackCreationDate;
 @synthesize customTags;
 @synthesize customSharingNote;
+@synthesize trackDescription;
 
 @synthesize location;
 @synthesize locationTitle;
@@ -413,6 +415,11 @@ const NSArray *allServices = nil;
 - (void)setSharingNote:(NSString *)aSharingNote;
 {
     self.customSharingNote = aSharingNote;
+}
+
+- (void)setDescription:(NSString *)description;
+{
+    self.trackDescription = description;
 }
 
 - (void)setAvailableConnections:(NSArray *)value;
@@ -1250,6 +1257,9 @@ const NSArray *allServices = nil;
     [parameters setObject:(self.isDownloadable) ? @"1" : @"0" forKey: @"track[downloadable]"];
     if ([self.customSharingNote length] > 0) {
         [parameters setObject:self.customSharingNote forKey:@"track[sharing_note]"];	
+    }
+    if ([self.trackDescription length] > 0) {
+        [parameters setObject:self.trackDescription forKey:@"track[description]"];
     }
     [parameters setObject:@"recording" forKey:@"track[track_type]"];
 
