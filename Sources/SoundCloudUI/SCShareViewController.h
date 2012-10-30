@@ -19,17 +19,17 @@
  */
 
 
-typedef void(^SCSharingViewControllerComletionHandler)(NSDictionary *trackInfo, NSError *error);
+typedef void(^SCSharingViewControllerCompletionHandler)(NSDictionary *trackInfo, NSError *error);
 
 @interface SCShareViewController : UINavigationController
 
 #pragma mark Class methods
 
 + (SCShareViewController *)shareViewControllerWithFileURL:(NSURL *)aFileURL
-                                        completionHandler:(SCSharingViewControllerComletionHandler)aCompletionHandler;
+                                        completionHandler:(SCSharingViewControllerCompletionHandler)aCompletionHandler;
 
 + (SCShareViewController *)shareViewControllerWithFileData:(NSData *)someData
-                                         completionHandler:(SCSharingViewControllerComletionHandler)aCompletionHandler;
+                                         completionHandler:(SCSharingViewControllerCompletionHandler)aCompletionHandler;
 
 #pragma mark Accessors
 
