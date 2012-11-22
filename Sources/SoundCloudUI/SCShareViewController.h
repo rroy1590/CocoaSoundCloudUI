@@ -40,6 +40,7 @@ typedef void(^SCSharingViewControllerCompletionHandler)(NSDictionary *trackInfo,
 - (void)setCreationDate:(NSDate *)aDate;
 - (void)setTags:(NSArray *)someTags;
 - (void)setSharingNote:(NSString *)aSharingNote;
+- (void)setCustomParameters:(NSDictionary*)dictionary;
 
 #pragma mark Foursquare
 

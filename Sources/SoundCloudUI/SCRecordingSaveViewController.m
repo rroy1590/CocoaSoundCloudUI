@@ -69,6 +69,7 @@
 @property (nonatomic, retain) NSDate *trackCreationDate;
 @property (nonatomic, retain) NSArray *customTags;
 @property (nonatomic, retain) NSString *customSharingNote;
+@property (nonatomic, retain) NSDictionary *customParameters;
 
 @property (nonatomic, retain) CLLocation *location;
 @property (nonatomic, copy) NSString *locationTitle;
@@ -186,6 +187,7 @@ const NSArray *allServices = nil;
 @synthesize trackCreationDate;
 @synthesize customTags;
 @synthesize customSharingNote;
+@synthesize customParameters;
 
 @synthesize location;
 @synthesize locationTitle;
@@ -1235,7 +1237,7 @@ const NSArray *allServices = nil;
     [self.view insertSubview:self.uploadProgressView belowSubview:self.toolBar];
     
     // set up request
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:self.customParameters];
     
     // track
     if (self.fileURL) {

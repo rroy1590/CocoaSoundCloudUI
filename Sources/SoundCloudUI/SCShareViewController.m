@@ -101,6 +101,11 @@
     [self.recordSaveController setSharingNote:aSharingNote];
 }
 
+- (void)setCustomParameters:(NSDictionary*)dictionary;
+{
+    [self.recordSaveController setCustomParameters:dictionary];
+}
+
 - (SCRecordingSaveViewController *)recordSaveController;
 {
     return (SCRecordingSaveViewController *)self.topViewController;
