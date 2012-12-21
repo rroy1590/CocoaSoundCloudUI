@@ -20,11 +20,12 @@
 
 #import <UIKit/UIKit.h>
 
-#pragma mark -
+@interface SCLoginView : UIScrollView
 
-@interface SCLoginView : UIView
 @property (nonatomic, assign) id delegate;
+
 - (void)loadURL:(NSURL *)aURL;
+
 @end
 
 @protocol SCLoginViewProtocol <NSObject>
