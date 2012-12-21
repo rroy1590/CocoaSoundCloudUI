@@ -113,30 +113,27 @@
     
     self.loginView = [[[SCLoginView alloc] initWithFrame:self.view.bounds] autorelease];
     self.loginView.delegate = self;
+    self.loginView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
     [self.loginView loadURL:self.preparedURL];
     [self.view addSubview:self.loginView];
     
     // Navigation Bar
     self.navigationController.navigationBarHidden = YES;
-    
-    // Toolbar
-    self.navigationController.toolbar.barStyle = UIBarStyleBlack;
-    self.navigationController.toolbarHidden = NO;
-    
-    NSMutableArray *toolbarItems = [NSMutableArray arrayWithCapacity:1];
-    
-    [toolbarItems addObject:[[[UIBarButtonItem alloc] initWithTitle:SCLocalizedString(@"cancel", @"Cancel")
-                                                              style:UIBarButtonItemStyleBordered
-                                                             target:self
-                                                             action:@selector(cancel)] autorelease]];
-    [self setToolbarItems:toolbarItems];
 }
 
 - (void)viewWillAppear:(BOOL)animated;
 {
     [super viewWillAppear:animated];
-    [self.view addSubview:[[[SCConnectToSoundCloudTitleView alloc] initWithFrame:CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.bounds), 28.0)] autorelease]];
-    self.loginView.frame = CGRectMake(0, 28.0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 28.0);
+    SCConnectToSoundCloudTitleView *scTitleView = [[[SCConnectToSoundCloudTitleView alloc] initWithFrame:CGRectMake(0,
+                                                                                                                    0,
+                                                                                                                    CGRectGetWidth(self.view.bounds),
+                                                                                                                    45.0)] autorelease];
+
+    [self.view addSubview:scTitleView];
+    self.loginView.frame = CGRectMake(0,
+                                      scTitleView.frame.size.height,
+                                      CGRectGetWidth(self.view.bounds),
+                                      CGRectGetHeight(self.view.bounds) - scTitleView.frame.size.height);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation;
@@ -177,6 +174,5 @@
     
     [[self modalPresentingViewController] dismissModalViewControllerAnimated:YES];
 }
-
 
 @end

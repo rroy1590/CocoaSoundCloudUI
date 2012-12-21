@@ -21,6 +21,8 @@
 #import "SCBundle.h"
 
 #import "SCConnectToSoundCloudTitleView.h"
+#import "SCGradientButton.h"
+#import "SCLoginViewController.h"
 
 @implementation SCConnectToSoundCloudTitleView
 
@@ -29,28 +31,61 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        
         self.backgroundColor = [UIColor blackColor];
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.layer.shadowColor = [UIColor blackColor].CGColor;
+        self.layer.shadowOpacity = 0.55;
+        self.layer.shadowOffset = CGSizeMake(0, 0);
+
+        // Cancel Button
+        NSArray *cancelButtonColors = [NSArray arrayWithObjects:
+                                       [UIColor colorWithRed:0.247
+                                                       green:0.247
+                                                        blue:0.247
+                                                       alpha:1.0],
+                                       [UIColor colorWithRed:0.169
+                                                       green:0.169
+                                                        blue:0.169
+                                                       alpha:1.0],
+                                       nil];
+
         
-        self.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
+        SCGradientButton *cancelButton = [[SCGradientButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) - 82.0,
+                                                                                            6.0,
+                                                                                            72.0,
+                                                                                            33.0)
+                                                                          colors:cancelButtonColors];
+        cancelButton.layer.borderColor = [UIColor blackColor].CGColor;
+        [cancelButton setTitle:SCLocalizedString(@"cancel", @"Cancel")
+                      forState:UIControlStateNormal];
+        cancelButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        cancelButton.titleLabel.textColor = [UIColor colorWithRed:0.8
+                                                            green:0.8
+                                                             blue:0.8
+                                                            alpha:1.0];
+        cancelButton.layer.shadowOffset = CGSizeMake(0, 1.0);
+        cancelButton.layer.shadowColor = [UIColor colorWithRed:0.325
+                                                         green:0.325
+                                                          blue:0.325
+                                                         alpha:1.0].CGColor;
+        [cancelButton addTarget:(SCLoginViewController *)self.superview
+                         action:@selector(cancel)
+               forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:cancelButton];
+        [cancelButton release];
         
+        // The Cloud
         UIImageView *cloudImageView = [[UIImageView alloc] init];
-//        cloudImageView.backgroundColor = [UIColor greenColor];
         cloudImageView.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
-        cloudImageView.image = [SCBundle imageWithName:@"cloud"];
+        cloudImageView.image = [SCBundle imageWithName:@"orange_header_logo"];
         [cloudImageView sizeToFit];
-        cloudImageView.frame = CGRectMake(9, 7, CGRectGetWidth(cloudImageView.frame), CGRectGetHeight(cloudImageView.frame));
+        cloudImageView.frame = CGRectMake(0,
+                                          0,
+                                          CGRectGetWidth(cloudImageView.frame),
+                                          CGRectGetHeight(cloudImageView.frame));
         [self addSubview:cloudImageView];
         [cloudImageView release];
-        
-        UIImageView *titleImageView = [[UIImageView alloc] init];
-//        titleImageView.backgroundColor = [UIColor yellowColor];
-        titleImageView.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
-        titleImageView.image = [SCBundle imageWithName:@"connecttosc"];
-        [titleImageView sizeToFit];
-        titleImageView.frame = CGRectMake(43, 7, CGRectGetWidth(titleImageView.frame), CGRectGetHeight(titleImageView.frame));
-        [self addSubview:titleImageView];
-        [titleImageView release];
+
     }
     return self;
 }
@@ -67,14 +102,14 @@
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace,
-                                                                 (CGFloat[]){1.0,0.40,0.0,1.0,  1.0,0.21,0.0,1.0},
-                                                                 (CGFloat[]){0.0, 1.0},
+                                                                 (CGFloat[]){0.22, 0.22, 0.22, 1.0,  0.137, 0.137, 0.137, 1.0},
+                                                                 (CGFloat[]){0, 1.0},
                                                                  2);
     CGContextDrawLinearGradient(context, gradient, gradientRect.origin, CGPointMake(gradientRect.origin.x, CGRectGetMaxY(gradientRect)), 0);
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
     
-    CGContextSetFillColor(context, (CGFloat[]){0.0,0.0,0.0,1.0});
+    CGContextSetFillColor(context, (CGFloat[]){0, 0, 0, 1.0});
     CGContextFillRect(context, topLineRect);
 }
 
