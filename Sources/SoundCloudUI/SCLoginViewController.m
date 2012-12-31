@@ -36,8 +36,8 @@
 
 #pragma mark -
 
-@interface SCLoginViewController ()
-- (id)initWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerComletionHandler)aCompletionHandler;
+@interface SCLoginViewController () <UIScrollViewDelegate>
+- (id)initWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerCompletionHandler)aCompletionHandler;
 
 #pragma mark Accessors
 @property (nonatomic, retain) NSURL *preparedURL;
@@ -90,6 +90,11 @@
                                                  selector:@selector(failToRequestAccess:)
                                                      name:SCSoundCloudDidFailToRequestAccessNotification
                                                    object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateScrollView)
+                                                     name:UIKeyboardDidShowNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -112,6 +117,7 @@
     [super viewDidLoad];
     
     self.loginView = [[[SCLoginView alloc] initWithFrame:self.view.bounds] autorelease];
+    self.loginView.loginDelegate = self;
     self.loginView.delegate = self;
     self.loginView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
     [self.loginView loadURL:self.preparedURL];
@@ -162,6 +168,15 @@
     [[self modalPresentingViewController] dismissModalViewControllerAnimated:YES];
 }
 
+- (void)updateScrollView
+{
+
+    [self.loginView scrollRectToVisible:CGRectMake(self.view.bounds.origin.x,
+                                                   self.view.bounds.origin.y,
+                                                   self.view.bounds.size.width,
+                                                   self.view.bounds.size.height)
+                               animated:YES];
+}
 
 #pragma mark Private
 
@@ -173,6 +188,14 @@
     }
     
     [[self modalPresentingViewController] dismissModalViewControllerAnimated:YES];
+}
+
+#pragma mark -
+#pragma mark UIScrollView delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self.loginView setNeedsDisplay];
 }
 
 @end

@@ -18,6 +18,11 @@
  * 
  */
 
+#if TARGET_OS_IPHONE
+#import "NXOAuth2.h"
+#else
+#import <OAuth2Client/NXOAuth2.h>
+#endif
 #import <QuartzCore/QuartzCore.h>
 
 #import "SCSoundCloud.h"
@@ -32,7 +37,7 @@
 #import "OHAttributedLabel.h"
 #import "NSAttributedString+Attributes.h"
 
-@interface SCLoginView () <OHAttributedLabelDelegate, UIScrollViewDelegate>
+@interface SCLoginView () <OHAttributedLabelDelegate>
 @property (nonatomic, readwrite, assign) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, assign) SCCredentialsView *credentialsView;
 @property (nonatomic, assign) UILabel *titleLabel;
@@ -161,7 +166,7 @@
     self.fbButton.layer.borderWidth = 1.0;
 #warning FB flow?
     [self.fbButton addTarget:self
-                      action:nil
+                      action:@selector(signInWithFacebook:)
             forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.fbButton];
 
@@ -323,6 +328,7 @@
                                      self.loginButton.frame.origin.y + self.loginButton.frame.size.height + 10.0,
                                      CGRectGetWidth(self.bounds) - 20.0,
                                      80.0);
+    [self setNeedsDisplay];
 }
 
 - (void)askForOpeningURL:(NSURL*)URL
@@ -340,7 +346,7 @@
 
 #pragma mark Accessors
 
-@synthesize delegate;
+@synthesize loginDelegate;
 @synthesize activityIndicator;
 @synthesize credentialsView;
 @synthesize fbButton;
@@ -375,9 +381,15 @@
     }
 }
 
+- (void)signInWithFacebook:(id)sender
+{
+#warning To-Do: api-team redirect flow -> input/output?
+    [[NXOAuth2AccountStore sharedStore] configurationForAccountType:kSCAccountType];
+}
+
 - (void)cancel:(id)senderg
 {
-    [self.delegate dismissModalViewControllerAnimated:YES];
+    [self.loginDelegate dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark -

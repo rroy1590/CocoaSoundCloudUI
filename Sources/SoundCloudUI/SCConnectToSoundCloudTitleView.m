@@ -48,13 +48,17 @@
                                                         blue:0.169
                                                        alpha:1.0],
                                        nil];
-
-        
         SCGradientButton *cancelButton = [[SCGradientButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) - 82.0,
                                                                                             6.0,
                                                                                             72.0,
                                                                                             33.0)
                                                                           colors:cancelButtonColors];
+//        UIButton *cancelButton = [[UIButton alloc] init];
+//        cancelButton.frame = CGRectMake(CGRectGetWidth(self.bounds) - 82.0,
+//                                        6.0,
+//                                        72.0,
+//                                        33.0);
+        cancelButton.backgroundColor = [UIColor colorWithPatternImage:[SCBundle imageWithName:@"cancel"]];
         cancelButton.layer.borderColor = [UIColor blackColor].CGColor;
         [cancelButton setTitle:SCLocalizedString(@"cancel", @"Cancel")
                       forState:UIControlStateNormal];

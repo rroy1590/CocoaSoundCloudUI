@@ -45,12 +45,31 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
         self.layer.shadowColor = [UIColor blackColor].CGColor;
         self.layer.shadowOffset = CGSizeMake(1.0, 5.0);
 
-
-
         [self layoutUsernameField];
         [self layoutPasswordField];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateInterface)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)updateInterface
+{
+    [self.usernameField setNeedsDisplay];
+    [self.passwordField setNeedsDisplay];
+}
+
+- (void)dealloc
+{
+    username = nil;
+    password = nil;
+    [username release];
+    [password release];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super dealloc];
 }
 
 #pragma mark -
@@ -126,9 +145,6 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
         case kSCPasswordTextFieldTag:
             self.password = textField.text;
             break;
-
-        default:
-            break;
     }
 }
 
@@ -156,9 +172,6 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
         case kSCPasswordTextFieldTag:
             self.password = textField.text;
             break;
-
-        default:
-            break;
     }
 
     return YES;
@@ -176,9 +189,6 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
             self.password = textField.text;
             [self.passwordField resignFirstResponder];
 //            [(SCLoginViewController *)self.superview login:nil];
-            break;
-
-        default:
             break;
     }
 
