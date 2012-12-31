@@ -105,14 +105,7 @@
 
 - (void)addInnerShadow
 {
-    UIImageView *innerShadowView = [[UIImageView alloc] init];
-    innerShadowView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    innerShadowView.image = [SCBundle imageWithName:@"input"];
-    [innerShadowView sizeToFit];
-    innerShadowView.frame = CGRectMake(1.0, 0,
-                                       CGRectGetWidth(innerShadowView.frame) - 1.0,
-                                       90.0);
-    [self insertSubview:innerShadowView atIndex:0];
+    self.backgroundColor = [UIColor colorWithPatternImage:[SCBundle imageWithName:@"input"]];
 }
 
 @end
