@@ -159,6 +159,8 @@
     self.fbButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
     [self.fbButton setTitleColor:[UIColor whiteColor]
                         forState:UIControlStateNormal];
+    //self.fbButton.contentHorizontalAlignment = UIControlContentVerticalAlignmentFill;
+    self.fbButton.titleEdgeInsets = UIEdgeInsetsMake(0, -40.0, 0, 0);
     self.fbButton.layer.borderColor = [UIColor colorWithRed:0
                                                       green:0.286
                                                        blue:0.569
