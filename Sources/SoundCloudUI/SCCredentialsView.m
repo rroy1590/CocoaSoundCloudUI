@@ -3,7 +3,7 @@
 //  SoundCloudUI
 //
 //  Created by r/o/b on 12/20/12.
-//  Copyright (c) 2012 nxtbgthng. All rights reserved.
+//  Copyright (c) 2012 SoundCloud. All rights reserved.
 //
 
 #import <QuartzCore/QuartzCore.h>
@@ -85,10 +85,11 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
     self.usernameField.placeholder = SCLocalizedString(@"username", @"Email");
     self.usernameField.font = [UIFont systemFontOfSize:16.0];
 
-    self.usernameField.textColor = [UIColor colorWithRed:0.2
-                                                   green:0.2
-                                                    blue:0.2
+    self.usernameField.textColor = [UIColor colorWithRed:0.6
+                                                   green:0.6
+                                                    blue:0.6
                                                    alpha:1.0];
+    self.usernameField.keyboardAppearance = UIKeyboardAppearanceAlert;
     self.usernameField.clearButtonMode = UITextFieldViewModeAlways;
     self.usernameField.tag = kSCUsernameTextFieldTag;
     self.usernameField.returnKeyType = UIReturnKeyNext;
@@ -105,11 +106,12 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
     self.passwordField.backgroundColor = [UIColor clearColor];
     self.passwordField.placeholder = SCLocalizedString(@"password", @"Password");
     self.passwordField.font = [UIFont systemFontOfSize:16.0];
-    self.passwordField.textColor = [UIColor colorWithRed:0.2
-                                                   green:0.2
-                                                    blue:0.2
+    self.passwordField.textColor = [UIColor colorWithRed:0.6
+                                                   green:0.6
+                                                    blue:0.6
                                                    alpha:1.0];
     self.passwordField.secureTextEntry = YES;
+    self.passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
     self.passwordField.clearButtonMode = UITextFieldViewModeAlways;
     self.passwordField.tag = kSCPasswordTextFieldTag;
     self.passwordField.returnKeyType = UIReturnKeyDone;
@@ -150,15 +152,18 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    textField.textColor = [UIColor colorWithRed:0.8
-                                          green:0.8
-                                           blue:0.8
+    textField.textColor = [UIColor colorWithRed:0.6
+                                          green:0.6
+                                           blue:0.6
                                           alpha:1.0];
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    textField.textColor = [UIColor blackColor];
+    textField.textColor = [UIColor colorWithRed:0.2
+                                          green:0.2
+                                           blue:0.2
+                                          alpha:1.0];
     return YES;
 }
 

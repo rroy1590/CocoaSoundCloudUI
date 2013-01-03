@@ -3,7 +3,7 @@
 //  SoundCloudUI
 //
 //  Created by r/o/b on 12/20/12.
-//  Copyright (c) 2012 nxtbgthng. All rights reserved.
+//  Copyright (c) 2012 SoundCloud. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

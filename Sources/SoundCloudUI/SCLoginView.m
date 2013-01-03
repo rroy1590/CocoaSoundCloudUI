@@ -29,7 +29,6 @@
 #import "SCSoundCloud+Private.h"
 #import "SCConstants.h"
 #import "SCBundle.h"
-#import "SCCredentialsView.h"
 #import "SCLoginView.h"
 #import "SCGradientButton.h"
 #import "SCAlertView.h"
@@ -39,7 +38,6 @@
 
 @interface SCLoginView () <OHAttributedLabelDelegate>
 @property (nonatomic, readwrite, assign) UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, assign) SCCredentialsView *credentialsView;
 @property (nonatomic, assign) UILabel *titleLabel;
 @property (nonatomic, assign) SCGradientButton *fbButton;
 @property (nonatomic, assign) SCGradientButton *loginButton;
@@ -64,8 +62,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     // Separator Line
-    CGFloat lineWidth = 1.0;
-    CGFloat topLineY = 135.0;
+    CGFloat lineWidth = 1.3;
+    CGFloat topLineY = 133.0;
     CGFloat bottomLineY = topLineY + lineWidth;
 
     // Top part
@@ -127,14 +125,14 @@
     self.titleLabel.textAlignment = UITextAlignmentLeft;
     self.titleLabel.text = [NSString stringWithFormat:SCLocalizedString(@"credential_title", @"Title"),
                             [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"]];
-    self.titleLabel.textColor = [UIColor colorWithRed:0.20
-                                                green:0.20
-                                                 blue:0.20
+    self.titleLabel.textColor = [UIColor colorWithRed:0.4
+                                                green:0.4
+                                                 blue:0.4
                                                 alpha:1.0];
     self.titleLabel.font = [UIFont systemFontOfSize:15.0];
     self.titleLabel.backgroundColor = [UIColor clearColor];
-    self.titleLabel.layer.shadowOffset = CGSizeMake(2.0, -3.0);
-    self.titleLabel.layer.shadowColor = [UIColor whiteColor].CGColor;
+    self.titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
+    self.titleLabel.shadowColor = [UIColor whiteColor];
     [self addSubview:self.titleLabel];
 }
 
@@ -156,22 +154,24 @@
     self.fbButton.backgroundColor = [UIColor whiteColor];
     [self.fbButton setTitle:SCLocalizedString(@"fb_sign_in",@"Facebook")
                    forState:UIControlStateNormal];
-    self.fbButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+    self.fbButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    self.fbButton.titleLabel.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin);
+    self.fbButton.titleLabel.shadowOffset = CGSizeMake(0.0, -0.9);
+    self.fbButton.titleLabel.shadowColor = [UIColor blackColor];
     [self.fbButton setTitleColor:[UIColor whiteColor]
                         forState:UIControlStateNormal];
-    //self.fbButton.contentHorizontalAlignment = UIControlContentVerticalAlignmentFill;
-    self.fbButton.titleEdgeInsets = UIEdgeInsetsMake(0, -40.0, 0, 0);
     self.fbButton.layer.borderColor = [UIColor colorWithRed:0
                                                       green:0.286
                                                        blue:0.569
                                                       alpha:1.0].CGColor;
     self.fbButton.layer.borderWidth = 1.0;
-#warning FB flow?
+
     [self.fbButton addTarget:self
                       action:@selector(signInWithFacebook:)
             forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.fbButton];
 
+   // Facebook logo
     UIImageView *fbLogo = [[UIImageView alloc] init];
     fbLogo.image = [SCBundle imageWithName:@"facebook"];
     [fbLogo sizeToFit];
@@ -191,72 +191,32 @@
 
 - (void)layoutLoginButton
 {
-    NSArray *connectButtonColors = [NSArray arrayWithObjects:
-                                    [UIColor colorWithRed:0.988
-                                                    green:0.988
-                                                     blue:0.988
-                                                    alpha:1.0],
-                                    [UIColor colorWithRed:0.933
-                                                    green:0.933
-                                                     blue:0.933
-                                                    alpha:1.0],
-                                    [UIColor colorWithRed:0.89
-                                                    green:0.89
-                                                     blue:0.89
-                                                    alpha:1.0],
-                                    nil];
-
     self.loginButton = [[SCGradientButton alloc] initWithFrame:CGRectZero
-                                                        colors:connectButtonColors];
-    self.loginButton.backgroundColor = [UIColor whiteColor];
+                                                        colors:nil];
+    self.loginButton.backgroundColor = [UIColor colorWithPatternImage:[SCBundle imageWithName:@"continue"]];
 
     [self.loginButton setTitle:SCLocalizedString(@"connect_to_sc",@"Connect")
                       forState:UIControlStateNormal];
-    self.loginButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+    self.loginButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [self.loginButton setTitleColor:[UIColor colorWithRed:0.4
                                                     green:0.4
                                                      blue:0.4
                                                     alpha:1.0]
                            forState:UIControlStateNormal];
-    self.loginButton.titleLabel.layer.shadowColor   = [UIColor whiteColor].CGColor;
-    self.loginButton.titleLabel.layer.shadowOffset  = CGSizeMake(1.0, -3.0);
-    self.loginButton.layer.shadowOffset             = CGSizeMake(1.0, -5.0);
-    self.loginButton.layer.shadowColor              = [UIColor colorWithRed:0.847
-                                                                      green:0.847
-                                                                       blue:0.847
-                                                                      alpha:1.0].CGColor;
-    self.loginButton.layer.borderColor = [UIColor colorWithRed:0.8
-                                                         green:0.8
-                                                          blue:0.8
-                                                         alpha:1.0].CGColor;
+
+    [self.loginButton setTitleShadowColor:[UIColor whiteColor]
+                                 forState:UIControlStateNormal];
+
+    self.loginButton.titleLabel.shadowOffset  = CGSizeMake(0.0, 1.0);
+    self.loginButton.layer.borderColor        = [UIColor colorWithRed:0.8
+                                                                green:0.8
+                                                                 blue:0.8
+                                                                alpha:1.0].CGColor;
     [self.loginButton addTarget:self
                          action:@selector(login:)
                forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.loginButton];
 }
-
-/*- (void)layoutForgotPasswordLabel
-{
-    // Forgot Password
-    NSMutableAttributedString *text = [NSMutableAttributedString attributedStringWithString:SCLocalizedString(@"forgot_password", @"ForgotPw")];
-    [text setFont:[UIFont systemFontOfSize:13.0]];
-
-    self.forgotPwLabel = [[OHAttributedLabel alloc] initWithFrame:CGRectZero];
-    self.forgotPwLabel.attributedText = text;
-    self.forgotPwLabel.centerVertically = YES;
-    self.forgotPwLabel.numberOfLines = 1;
-    self.forgotPwLabel.lineBreakMode = UILineBreakModeWordWrap;
-    self.forgotPwLabel.textAlignment = UITextAlignmentLeft;
-    self.forgotPwLabel.backgroundColor = [UIColor clearColor];
-    self.forgotPwLabel.delegate = self;
-
-    NSRange forgotPw = [text.string rangeOfString:SCLocalizedString(@"forgot_password", @"ForgotPw")];
-    NSAssert((forgotPw.location != NSNotFound), @"Localisation of forgot_password needs to contain substring");
-    [self.forgotPwLabel addCustomLink:[NSURL URLWithString:kForgotPasswordUrl]
-                      inRange:forgotPw];
-
-    [self addSubview:self.forgotPwLabel];
-}*/
 
 - (void)layoutTermsAndPrivacy
 {
@@ -266,7 +226,6 @@
     self.tosLabel = [[OHAttributedLabel alloc] initWithFrame:CGRectZero];
     self.tosLabel.attributedText = text;
     self.tosLabel.centerVertically = NO;
-    self.tosLabel.numberOfLines = 2;
     self.tosLabel.lineBreakMode = UILineBreakModeWordWrap;
     self.tosLabel.textAlignment = UITextAlignmentCenter;
     self.tosLabel.textColor = [UIColor colorWithRed:0.6
@@ -294,7 +253,7 @@
 - (void)layoutSubviews;
 {
     CGFloat titleLabelX = 18.0;
-    CGFloat titleLabelY = 20.0;
+    CGFloat titleLabelY = 13.0;
     CGFloat titleLabelHeight = 40.0;
 
     self.titleLabel.frame = CGRectMake(titleLabelX,
@@ -302,32 +261,27 @@
                                        self.bounds.size.width - self.frame.origin.x,
                                        titleLabelHeight);
 
-    self.credentialsView.frame = CGRectMake(10.0,
-                                            158.0,
-                                            self.bounds.size.width - 20.0,
-                                            100.0);
-
+    self.credentialsView.frame = CGRectMake(13.0,
+                                            155.0,
+                                            self.bounds.size.width - 27.0,
+                                            97.0);
 
     self.fbButton.frame = CGRectMake(self.credentialsView.frame.origin.x,
-                                     71.0,
+                                     69.0,
                                      self.credentialsView.frame.size.width,
                                      43.0);
 
     self.loginButton.frame = CGRectMake(self.credentialsView.frame.origin.x,
-                                        self.credentialsView.frame.origin.y + self.credentialsView.frame.size.height + 20.0,
+                                        self.credentialsView.frame.origin.y + self.credentialsView.frame.size.height + 21.0,
                                         self.credentialsView.frame.size.width,
                                         43.0);
+    self.fbButton.titleEdgeInsets = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ?
+                                                                    UIEdgeInsetsMake(0, -278.0, 0, 0) : UIEdgeInsetsMake(0, -30.0, 0, 0);
 
     self.activityIndicator.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 
-/*    self.forgotPwLabel.frame = CGRectMake(self.credentialsView.frame.origin.x,
-                                          self.credentialsView.frame.origin.y + self.credentialsView.frame.size.height + 10.0,
-                                          CGRectGetWidth(self.bounds),
-                                          20.0);
- */
-
     self.tosLabel.frame = CGRectMake(self.loginButton.frame.origin.x,
-                                     self.loginButton.frame.origin.y + self.loginButton.frame.size.height + 10.0,
+                                     self.loginButton.frame.origin.y + self.loginButton.frame.size.height + 17.0,
                                      CGRectGetWidth(self.bounds) - 20.0,
                                      80.0);
     [self setNeedsDisplay];
@@ -369,7 +323,8 @@
 
 - (void)login:(id)sender
 {
-   if (self.credentialsView.username && self.credentialsView.password) {
+   if (![self.credentialsView.username isEqualToString:@""] &&
+       ![self.credentialsView.password isEqualToString:@""]) {
         [[SCSoundCloud shared] requestAccessWithUsername:self.credentialsView.username
                                                 password:self.credentialsView.password];
     } else {
@@ -389,9 +344,9 @@
     [[NXOAuth2AccountStore sharedStore] configurationForAccountType:kSCAccountType];
 }
 
-- (void)cancel:(id)senderg
+- (void)cancel:(id)sender
 {
-    [self.loginDelegate dismissModalViewControllerAnimated:YES];
+    [(UIViewController *)self.loginDelegate dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark -
@@ -404,9 +359,6 @@
     } else if ([linkInfo.URL.absoluteString isEqualToString:kPrivacyPolicyUrl]) {
         [self askForOpeningURL:[NSURL URLWithString:kPrivacyPolicyUrl]];
     }
-//    } else if ([linkInfo.URL.absoluteString isEqualToString:kForgotPasswordUrl]) {
-//        [self askForOpeningURL:[NSURL URLWithString:kForgotPasswordUrl]];
-//    }
     return NO;
 }
 

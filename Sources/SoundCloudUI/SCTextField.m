@@ -43,13 +43,27 @@
 // Placeholder Text Bounds
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
-    return CGRectInset(bounds, 10.0, 15.0);
+    return CGRectInset(bounds, 10.0, 12.0);
 }
 
 // Actual Text Bounds
 - (CGRect)editingRectForBounds:(CGRect)bounds
 {
-    return CGRectInset(bounds, 10.0, 15.0);
+    CGRect makeRoomForClearButton = CGRectMake(bounds.origin.x,
+                                               bounds.origin.y,
+                                               bounds.size.width - 20.0,
+                                               bounds.size.height);
+    return CGRectInset(makeRoomForClearButton, 10.0, 12.0);
+}
+
+// Rect for Clear Button
+- (CGRect)clearButtonRectForBounds:(CGRect)bounds
+{
+    CGRect original = [super clearButtonRectForBounds:bounds];
+    return CGRectMake(original.origin.x - 5.0,
+                      original.origin.y,
+                      original.size.width,
+                      original.size.height);
 }
 
 - (void)drawRect:(CGRect)rect

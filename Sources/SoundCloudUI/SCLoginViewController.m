@@ -19,6 +19,7 @@
  */
 
 #import "UIViewController+SoundCloudUI.h"
+#import "UIView+SoundCloudUI.h"
 #import "UIDevice+SoundCloudUI.h"
 
 #import "SCLoginView.h"
@@ -37,7 +38,7 @@
 
 #pragma mark -
 
-@interface SCLoginViewController () <UIScrollViewDelegate>
+@interface SCLoginViewController () <UIScrollViewDelegate, SCLoginViewProtocol>
 - (id)initWithPreparedURL:(NSURL *)anURL completionHandler:(SCLoginViewControllerCompletionHandler)aCompletionHandler;
 
 #pragma mark Accessors
@@ -96,6 +97,11 @@
                                                  selector:@selector(updateScrollView)
                                                      name:UIKeyboardDidShowNotification
                                                    object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateScrollView)
+                                                     name:UIKeyboardDidHideNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -116,11 +122,10 @@
 - (void)viewDidLoad;
 {
     [super viewDidLoad];
-    
     self.loginView = [[[SCLoginView alloc] initWithFrame:self.view.bounds] autorelease];
     self.loginView.loginDelegate = self;
     self.loginView.delegate = self;
-    self.loginView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
+    self.loginView.contentSize = CGSizeMake(1.0, CGRectGetHeight(self.loginView.bounds));
     [self.loginView loadURL:self.preparedURL];
     [self.view addSubview:self.loginView];
     
@@ -134,7 +139,7 @@
     SCConnectToSoundCloudTitleView *scTitleView = [[[SCConnectToSoundCloudTitleView alloc] initWithFrame:CGRectMake(0,
                                                                                                                     0,
                                                                                                                     CGRectGetWidth(self.view.bounds),
-                                                                                                                    45.0)] autorelease];
+                                                                                                                    44.0)] autorelease];
 
     [self.view addSubview:scTitleView];
     self.loginView.frame = CGRectMake(0,
@@ -147,10 +152,9 @@
 {
     if ([UIDevice isIPad]) {
         return YES;
-        
-    } else {
-        return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
     }
+
+    return UIInterfaceOrientationIsPortrait(toInterfaceOrientation);
 }
 
 #pragma mark Notifications
@@ -171,17 +175,38 @@
         self.completionHandler(error);
     }
     
-    [[self modalPresentingViewController] dismissModalViewControllerAnimated:YES];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:SCLocalizedString(@"auth_error", @"Auth Error")
+                                                    message:SCLocalizedString(@"auth_error_message", @"Auth Message Error")
+                                                   delegate:nil
+                                          cancelButtonTitle:SCLocalizedString(@"alert_ok", @"OK")
+                                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+
+    //[[self modalPresentingViewController] dismissModalViewControllerAnimated:YES];
 }
 
 - (void)updateScrollView
 {
+    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ||
+        ![UIDevice isTallIphone]) {
+        UIView *firstResponderView = [self.loginView.credentialsView firstResponderFromSubviews];
+        CGRect bounds;
+        CGPoint position;
+        // Our TextField requires a y-offset (self.loginView.frame.origin.y)
+        if ([firstResponderView isKindOfClass:[UITextField class]]) {
+            bounds = [firstResponderView convertRect:firstResponderView.superview.superview.bounds
+                                              toView:self.view];
+            position = CGPointMake(self.loginView.credentialsView.bounds.origin.x,
+                                   bounds.origin.y - self.loginView.frame.origin.y);
+        } else {
+            position = self.view.bounds.origin;
+        }
 
-    [self.loginView scrollRectToVisible:CGRectMake(self.view.bounds.origin.x,
-                                                   self.view.bounds.origin.y,
-                                                   self.view.bounds.size.width,
-                                                   self.view.bounds.size.height)
-                               animated:YES];
+        [self.loginView setContentOffset:CGPointMake(position.x,
+                                                     position.y)
+                                animated:YES];
+    }
 }
 
 #pragma mark Private

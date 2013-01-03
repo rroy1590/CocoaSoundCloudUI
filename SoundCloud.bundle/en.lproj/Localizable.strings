@@ -122,7 +122,11 @@
 
 "credentials_error" = "Check Credentials";
 
-"credentials_error_message" = "Both Email and Password are required for login";
+"credentials_error_message" = "Email and Password are required for login";
+
+"auth_error" = "Ooops";
+
+"auth_error_message" = "Authorization failed. Please check your credentials and try logging in again.";
 
 "connect_to_sc" = "Connect to SoundCloud";
 
@@ -134,7 +138,7 @@
 
 "open_in_safari_message" = "Do you want to open the link in Safari?";
 
-"sign_in_tos_pp_body" = "By signing in you accept our\n Terms of Use and Privacy Policy";
+"sign_in_tos_pp_body" = "By signing in you accept our Terms of Use and Privacy Policy";
 
 "terms_of_use_substring" = "Terms of Use";
 

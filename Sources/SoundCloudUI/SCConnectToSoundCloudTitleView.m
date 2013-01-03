@@ -38,35 +38,23 @@
         self.layer.shadowOffset = CGSizeMake(0, 0);
 
         // Cancel Button
-        NSArray *cancelButtonColors = [NSArray arrayWithObjects:
-                                       [UIColor colorWithRed:0.247
-                                                       green:0.247
-                                                        blue:0.247
-                                                       alpha:1.0],
-                                       [UIColor colorWithRed:0.169
-                                                       green:0.169
-                                                        blue:0.169
-                                                       alpha:1.0],
-                                       nil];
-        SCGradientButton *cancelButton = [[SCGradientButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) - 82.0,
+        SCGradientButton *cancelButton = [[SCGradientButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) - 80.0,
                                                                                             6.0,
                                                                                             72.0,
                                                                                             33.0)
-                                                                          colors:cancelButtonColors];
-//        UIButton *cancelButton = [[UIButton alloc] init];
-//        cancelButton.frame = CGRectMake(CGRectGetWidth(self.bounds) - 82.0,
-//                                        6.0,
-//                                        72.0,
-//                                        33.0);
+                                                                          colors:nil];
         cancelButton.backgroundColor = [UIColor colorWithPatternImage:[SCBundle imageWithName:@"cancel"]];
         cancelButton.layer.borderColor = [UIColor blackColor].CGColor;
         [cancelButton setTitle:SCLocalizedString(@"cancel", @"Cancel")
                       forState:UIControlStateNormal];
-        cancelButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
         cancelButton.titleLabel.textColor = [UIColor colorWithRed:0.8
                                                             green:0.8
                                                              blue:0.8
                                                             alpha:1.0];
+        [cancelButton setTitleShadowColor:[UIColor blackColor]
+                                 forState:UIControlStateNormal];
+        cancelButton.titleLabel.shadowOffset = CGSizeMake(0, -1.0);
         cancelButton.layer.shadowOffset = CGSizeMake(0, 1.0);
         cancelButton.layer.shadowColor = [UIColor colorWithRed:0.325
                                                          green:0.325
@@ -80,13 +68,15 @@
         
         // The Cloud
         UIImageView *cloudImageView = [[UIImageView alloc] init];
-        cloudImageView.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
+        cloudImageView.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin);
         cloudImageView.image = [SCBundle imageWithName:@"orange_header_logo"];
         [cloudImageView sizeToFit];
+
+
         cloudImageView.frame = CGRectMake(0,
                                           0,
                                           CGRectGetWidth(cloudImageView.frame),
-                                          CGRectGetHeight(cloudImageView.frame));
+                                          CGRectGetHeight(cloudImageView.frame) - 0.6);
         [self addSubview:cloudImageView];
         [cloudImageView release];
 
