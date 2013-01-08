@@ -1160,6 +1160,17 @@ const NSArray *allServices = nil;
     }
 }
 
+/*
+    Please note that UIImagePickerController will throw a
+    UIApplicationInvalidInterfaceOrientation exception if your app does not
+    include portrait in UISupportedInterfaceOrientations (Info.plist).
+
+    For landscape only apps, we suggest enabling portrait orientation(s) in your
+    Info.plist and rejecting these in UIViewController's auto-rotation methods.
+    This way, you can be landscape only for your view controllers and still be
+    able to use UIImagePickerController. :)
+ */
+
 - (IBAction)openCameraPicker;
 {
     if (self.imagePickerPopoverController) {
