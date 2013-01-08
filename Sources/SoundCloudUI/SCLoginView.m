@@ -27,6 +27,9 @@
 
 #import "SCSoundCloud.h"
 #import "SCSoundCloud+Private.h"
+#import "UIColor+SoundCloudUI.h"
+#import "UIDevice+SoundCloudUI.h"
+#import "UIView+SoundCloudUI.h"
 #import "SCConstants.h"
 #import "SCBundle.h"
 #import "SCLoginView.h"
@@ -36,12 +39,12 @@
 #import "OHAttributedLabel.h"
 #import "NSAttributedString+Attributes.h"
 
-@interface SCLoginView () <OHAttributedLabelDelegate>
+@interface SCLoginView () <OHAttributedLabelDelegate, UIWebViewDelegate>
 @property (nonatomic, readwrite, assign) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, assign) UILabel *titleLabel;
 @property (nonatomic, assign) SCGradientButton *fbButton;
 @property (nonatomic, assign) SCGradientButton *loginButton;
-//@property (nonatomic, assign) OHAttributedLabel *forgotPwLabel;
+@property (nonatomic, readwrite, assign) UIWebView *webView;
 @property (nonatomic, assign) OHAttributedLabel *tosLabel;
 - (void)commonAwake;
 @end
@@ -67,10 +70,7 @@
     CGFloat bottomLineY = topLineY + lineWidth;
 
     // Top part
-    CGColorRef topLineColor = [UIColor colorWithRed:0.8
-                                              green:0.8
-                                               blue:0.8
-                                              alpha:1.0].CGColor;
+    CGColorRef topLineColor = [UIColor soundCloudSuperLightGrey].CGColor;
 
     CGPoint topLineStartPoint = CGPointMake(0, topLineY);
     CGPoint topLineEndPoint   = CGPointMake(CGRectGetWidth(self.bounds), topLineY);
@@ -97,16 +97,20 @@
 	self.activityIndicator.hidesWhenStopped = YES;
 	[self addSubview:self.activityIndicator];
     
-    self.backgroundColor = [UIColor colorWithRed:0.949
-                                           green:0.949
-                                            blue:0.949
-                                           alpha:1.0];
+    self.webView = [[[UIWebView alloc] initWithFrame:self.bounds] autorelease];
+    self.webView.delegate = self;
+    self.webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.alpha = 0.0;
+    self.webView.opaque = NO;
+    [self addSubview:self.webView];
+
+    self.backgroundColor = [UIColor soundCloudBackgroundGrey];
 
     [self layoutTitleLabel];
     [self layoutFbButton];
     [self layoutCredentialsView];
     [self layoutLoginButton];
-    //[self layoutForgotPasswordLabel];
     [self layoutTermsAndPrivacy];
 }
 
@@ -125,10 +129,7 @@
     self.titleLabel.textAlignment = UITextAlignmentLeft;
     self.titleLabel.text = [NSString stringWithFormat:SCLocalizedString(@"credential_title", @"Title"),
                             [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"]];
-    self.titleLabel.textColor = [UIColor colorWithRed:0.4
-                                                green:0.4
-                                                 blue:0.4
-                                                alpha:1.0];
+    self.titleLabel.textColor = [UIColor soundCloudGrey];
     self.titleLabel.font = [UIFont systemFontOfSize:15.0];
     self.titleLabel.backgroundColor = [UIColor clearColor];
     self.titleLabel.shadowOffset = CGSizeMake(0.0, 1.0);
@@ -171,7 +172,7 @@
             forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.fbButton];
 
-   // Facebook logo
+    // Facebook logo
     UIImageView *fbLogo = [[UIImageView alloc] init];
     fbLogo.image = [SCBundle imageWithName:@"facebook"];
     [fbLogo sizeToFit];
@@ -198,20 +199,14 @@
     [self.loginButton setTitle:SCLocalizedString(@"connect_to_sc",@"Connect")
                       forState:UIControlStateNormal];
     self.loginButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    [self.loginButton setTitleColor:[UIColor colorWithRed:0.4
-                                                    green:0.4
-                                                     blue:0.4
-                                                    alpha:1.0]
+    [self.loginButton setTitleColor:[UIColor soundCloudGrey]
                            forState:UIControlStateNormal];
 
     [self.loginButton setTitleShadowColor:[UIColor whiteColor]
                                  forState:UIControlStateNormal];
 
     self.loginButton.titleLabel.shadowOffset  = CGSizeMake(0.0, 1.0);
-    self.loginButton.layer.borderColor        = [UIColor colorWithRed:0.8
-                                                                green:0.8
-                                                                 blue:0.8
-                                                                alpha:1.0].CGColor;
+    self.loginButton.layer.borderColor        = [UIColor soundCloudSuperLightGrey].CGColor;
     [self.loginButton addTarget:self
                          action:@selector(login:)
                forControlEvents:UIControlEventTouchUpInside];
@@ -228,24 +223,35 @@
     self.tosLabel.centerVertically = NO;
     self.tosLabel.lineBreakMode = UILineBreakModeWordWrap;
     self.tosLabel.textAlignment = UITextAlignmentCenter;
-    self.tosLabel.textColor = [UIColor colorWithRed:0.6
-                                              green:0.6
-                                               blue:0.6
-                                              alpha:1.0];
+    self.tosLabel.textColor = [UIColor soundCloudLightGrey];
     self.tosLabel.backgroundColor = [UIColor clearColor];
     self.tosLabel.delegate = self;
 
     NSRange touLinkRange = [text.string rangeOfString:SCLocalizedString(@"terms_of_use_substring", nil)];
     NSAssert((touLinkRange.location != NSNotFound), @"Localisation of sign_in_tos_pp_body needs to contain substring");
-    [self.tosLabel addCustomLink:[NSURL URLWithString:kTermsOrServiceUrl]
+    [self.tosLabel addCustomLink:[NSURL URLWithString:kTermsOfServiceURL]
                          inRange:touLinkRange];
 
     NSRange ppLinkRange = [text.string rangeOfString:SCLocalizedString(@"privatcy_policy_substring", nil)];
     NSAssert((ppLinkRange.location != NSNotFound), @"Localisation of sign_in_tos_pp_body needs to contain substring");
-    [self.tosLabel addCustomLink:[NSURL URLWithString:kPrivacyPolicyUrl]
+    [self.tosLabel addCustomLink:[NSURL URLWithString:kPrivacyPolicyURL]
                          inRange:ppLinkRange];
 
     [self addSubview:self.tosLabel];
+}
+
+- (UIEdgeInsets)updateEdgeInsets
+{
+    UIEdgeInsets edgeInsets;
+    if ([UIDevice isIPad]) {
+        edgeInsets = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ?
+        UIEdgeInsetsMake(0, -CGRectGetWidth(self.bounds)/3, 0, 0) : UIEdgeInsetsMake(0, -230.0, 0, 0);
+
+    } else {
+       edgeInsets = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ?
+        UIEdgeInsetsMake(0, -CGRectGetWidth(self.bounds)/3, 0, 0) : UIEdgeInsetsMake(0, -30.0, 0, 0);
+    }
+    return edgeInsets;
 }
 
 #pragma mark View
@@ -255,6 +261,9 @@
     CGFloat titleLabelX = 18.0;
     CGFloat titleLabelY = 13.0;
     CGFloat titleLabelHeight = 40.0;
+    CGFloat buttonHeight = 43.0;
+
+    self.webView.frame = self.bounds;
 
     self.titleLabel.frame = CGRectMake(titleLabelX,
                                        titleLabelY,
@@ -269,14 +278,14 @@
     self.fbButton.frame = CGRectMake(self.credentialsView.frame.origin.x,
                                      69.0,
                                      self.credentialsView.frame.size.width,
-                                     43.0);
+                                     buttonHeight);
 
     self.loginButton.frame = CGRectMake(self.credentialsView.frame.origin.x,
                                         self.credentialsView.frame.origin.y + self.credentialsView.frame.size.height + 21.0,
                                         self.credentialsView.frame.size.width,
-                                        43.0);
-    self.fbButton.titleEdgeInsets = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ?
-                                                                    UIEdgeInsetsMake(0, -278.0, 0, 0) : UIEdgeInsetsMake(0, -30.0, 0, 0);
+                                        buttonHeight);
+
+    self.fbButton.titleEdgeInsets = [self updateEdgeInsets];
 
     self.activityIndicator.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 
@@ -308,10 +317,9 @@
 @synthesize fbButton;
 @synthesize loginButton;
 @synthesize titleLabel;
-//@synthesize forgotPwLabel;
 @synthesize tosLabel;
 
-- (void)loadURL:(NSURL *)anURL;
+- (void)removeAllCookies;
 {
     // WORKAROUND: Remove all Cookies to enable the use of facebook user accounts
     for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies]) {
@@ -323,8 +331,10 @@
 
 - (void)login:(id)sender
 {
-   if (![self.credentialsView.username isEqualToString:@""] &&
-       ![self.credentialsView.password isEqualToString:@""]) {
+    [[self firstResponderFromSubviews] resignFirstResponder];
+
+   if ((self.credentialsView.username.length != 0) &&
+       (self.credentialsView.password.length != 0)) {
         [[SCSoundCloud shared] requestAccessWithUsername:self.credentialsView.username
                                                 password:self.credentialsView.password];
     } else {
@@ -340,8 +350,14 @@
 
 - (void)signInWithFacebook:(id)sender
 {
-#warning To-Do: api-team redirect flow -> input/output?
-    [[NXOAuth2AccountStore sharedStore] configurationForAccountType:kSCAccountType];
+    NSDictionary *accountConfig = [[NXOAuth2AccountStore sharedStore] configurationForAccountType:kSCAccountType];
+    NSURL *URLToOpen = [NSURL URLWithString:[NSString stringWithFormat:@"%@/via/facebook?client_id=%@&redirect_uri=%@&display=popup&response_type=code",
+                                                accountConfig[kNXOAuth2AccountStoreConfigurationAuthorizeURL],
+                                                accountConfig[kNXOAuth2AccountStoreConfigurationClientID],
+                                                accountConfig[kNXOAuth2AccountStoreConfigurationRedirectURL]]];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:URLToOpen]];
+    // Dismiss Keyboard if it is still shown
+    [[self firstResponderFromSubviews] resignFirstResponder];
 }
 
 - (void)cancel:(id)sender
@@ -354,21 +370,75 @@
 
 - (BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo;
 {
-    if ([linkInfo.URL.absoluteString isEqualToString:kTermsOrServiceUrl]) {
-        [self askForOpeningURL:[NSURL URLWithString:kTermsOrServiceUrl]];
-    } else if ([linkInfo.URL.absoluteString isEqualToString:kPrivacyPolicyUrl]) {
-        [self askForOpeningURL:[NSURL URLWithString:kPrivacyPolicyUrl]];
+    if ([linkInfo.URL.absoluteString isEqualToString:kTermsOfServiceURL]) {
+        [self askForOpeningURL:[NSURL URLWithString:kTermsOfServiceURL]];
+    } else if ([linkInfo.URL.absoluteString isEqualToString:kPrivacyPolicyURL]) {
+        [self askForOpeningURL:[NSURL URLWithString:kPrivacyPolicyURL]];
     }
     return NO;
 }
 
-- (UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo underlineStyle:(int32_t*)underlineStyle; //!< Combination of CTUnderlineStyle and CTUnderlineStyleModifiers
+- (UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo underlineStyle:(int32_t*)underlineStyle;
 {
     *underlineStyle = kCTUnderlineStyleSingle;
-    return [UIColor colorWithRed:0.4
-                           green:0.4
-                            blue:0.4
-                           alpha:1.0];
+    return [UIColor soundCloudGrey];
+}
+
+#pragma mark WebView Delegate
+
+- (void)webViewDidStartLoad:(UIWebView *)webView;
+{
+    [self.activityIndicator startAnimating];
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         [self bringSubviewToFront:self.webView];
+                         self.webView.alpha = 1.0;
+                         self.webView.backgroundColor = [UIColor colorWithRed:0.3
+                                                                        green:0.3
+                                                                         blue:0.3
+                                                                        alpha:1.0];
+                         self.bounds = self.webView.frame;
+                         [self bringSubviewToFront:self.activityIndicator];
+                     }];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView;
+{
+    [self.activityIndicator stopAnimating];
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
+{
+    [SCSoundCloud handleRedirectURL:request.URL];
+    return YES;
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error;
+{
+    if ([[error domain] isEqualToString:NSURLErrorDomain]) {
+
+        if ([error code] == NSURLErrorCancelled)
+            return;
+
+    } else if ([[error domain] isEqualToString:@"WebKitErrorDomain"]) {
+
+        if ([error code] == 101)
+            return;
+
+        if ([error code] == 102)
+            return;
+    }
+
+    if ([self.loginDelegate respondsToSelector:@selector(loginView:didFailWithError:)]) {
+        [self.loginDelegate loginView:self
+                     didFailWithError:error];
+    }
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [[self firstResponderFromSubviews] resignFirstResponder];
+    [super touchesBegan:touches withEvent:event];
 }
 
 @end

@@ -109,10 +109,8 @@
 - (void)dealloc;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
     [preparedURL release];
     [completionHandler release];
-    
     [super dealloc];
 }
 
@@ -126,7 +124,7 @@
     self.loginView.loginDelegate = self;
     self.loginView.delegate = self;
     self.loginView.contentSize = CGSizeMake(1.0, CGRectGetHeight(self.loginView.bounds));
-    [self.loginView loadURL:self.preparedURL];
+    [self.loginView removeAllCookies];
     [self.view addSubview:self.loginView];
     
     // Navigation Bar

@@ -41,7 +41,7 @@
         SCGradientButton *cancelButton = [[SCGradientButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) - 80.0,
                                                                                             6.0,
                                                                                             72.0,
-                                                                                            33.0)
+                                                                                            32.0)
                                                                           colors:nil];
         cancelButton.backgroundColor = [UIColor colorWithPatternImage:[SCBundle imageWithName:@"cancel"]];
         cancelButton.layer.borderColor = [UIColor blackColor].CGColor;
@@ -55,11 +55,6 @@
         [cancelButton setTitleShadowColor:[UIColor blackColor]
                                  forState:UIControlStateNormal];
         cancelButton.titleLabel.shadowOffset = CGSizeMake(0, -1.0);
-        cancelButton.layer.shadowOffset = CGSizeMake(0, 1.0);
-        cancelButton.layer.shadowColor = [UIColor colorWithRed:0.325
-                                                         green:0.325
-                                                          blue:0.325
-                                                         alpha:1.0].CGColor;
         [cancelButton addTarget:(SCLoginViewController *)self.superview
                          action:@selector(cancel)
                forControlEvents:UIControlEventTouchUpInside];
@@ -71,12 +66,10 @@
         cloudImageView.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin);
         cloudImageView.image = [SCBundle imageWithName:@"orange_header_logo"];
         [cloudImageView sizeToFit];
-
-
         cloudImageView.frame = CGRectMake(0,
-                                          0,
+                                          -0.6,
                                           CGRectGetWidth(cloudImageView.frame),
-                                          CGRectGetHeight(cloudImageView.frame) - 0.6);
+                                          CGRectGetHeight(cloudImageView.frame));
         [self addSubview:cloudImageView];
         [cloudImageView release];
 

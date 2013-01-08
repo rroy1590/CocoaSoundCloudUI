@@ -66,10 +66,16 @@
 	return self;
 }
 
+- (void)setSelected:(BOOL)selected;
+{
+    [super setSelected:selected];
+    [self setNeedsDisplay];
+}
+
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    self.alpha = highlighted ? 0.7 : 1.0;
+    [self setNeedsDisplay];
 }
 
 @end

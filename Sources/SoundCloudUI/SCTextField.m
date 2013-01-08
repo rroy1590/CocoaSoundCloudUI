@@ -78,9 +78,6 @@
             [self roundedCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight)
                        withRadii:CGSizeMake(kSCBorderRadius, kSCBorderRadius)];
             break;
-
-        default:
-            break;
     }
 
     // Separator line
@@ -88,10 +85,7 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSaveGState(context);
         CGContextSetLineCap(context, kCGLineCapSquare);
-        CGColorRef color = [UIColor colorWithRed:0.8
-                                           green:0.8
-                                            blue:0.8
-                                           alpha:1.0].CGColor;
+        CGColorRef color = [UIColor soundCloudSuperLightGrey].CGColor;
         CGContextSetStrokeColorWithColor(context, color);
         CGContextSetLineWidth(context, 1.0);
 

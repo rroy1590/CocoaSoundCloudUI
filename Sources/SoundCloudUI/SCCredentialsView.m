@@ -11,7 +11,8 @@
 #import "SCCredentialsView.h"
 #import "SCConstants.h"
 #import "SCBundle.h"
-
+#import "UIColor+SoundCloudUI.h"
+#import "SCLoginView.h"
 
 float const kSCBorderRadius = 4.0;
 NSUInteger const kSCUsernameTextFieldTag = 1001;
@@ -37,10 +38,7 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
         // Initialization code
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = kSCBorderRadius;
-        self.layer.borderColor = [UIColor colorWithRed:0.8
-                                                 green:0.8
-                                                  blue:0.8
-                                                 alpha:1.0].CGColor;
+        self.layer.borderColor = [UIColor soundCloudSuperLightGrey].CGColor;
         self.layer.borderWidth = 1.0;
         self.layer.shadowColor = [UIColor blackColor].CGColor;
         self.layer.shadowOffset = CGSizeMake(1.0, 5.0);
@@ -64,11 +62,9 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
 
 - (void)dealloc
 {
-    username = nil;
-    password = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [username release];
     [password release];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
 
@@ -84,13 +80,12 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
     self.usernameField.backgroundColor = [UIColor clearColor];
     self.usernameField.placeholder = SCLocalizedString(@"username", @"Email");
     self.usernameField.font = [UIFont systemFontOfSize:16.0];
-
-    self.usernameField.textColor = [UIColor colorWithRed:0.6
-                                                   green:0.6
-                                                    blue:0.6
-                                                   alpha:1.0];
+    self.usernameField.textColor = [UIColor soundCloudLightGrey];
     self.usernameField.keyboardAppearance = UIKeyboardAppearanceAlert;
+    self.usernameField.keyboardType = UIKeyboardTypeEmailAddress;
     self.usernameField.clearButtonMode = UITextFieldViewModeAlways;
+    self.usernameField.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.usernameField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.usernameField.tag = kSCUsernameTextFieldTag;
     self.usernameField.returnKeyType = UIReturnKeyNext;
     self.usernameField.cornerStyle = SCTextFieldCornerStyleTop;
@@ -106,10 +101,7 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
     self.passwordField.backgroundColor = [UIColor clearColor];
     self.passwordField.placeholder = SCLocalizedString(@"password", @"Password");
     self.passwordField.font = [UIFont systemFontOfSize:16.0];
-    self.passwordField.textColor = [UIColor colorWithRed:0.6
-                                                   green:0.6
-                                                    blue:0.6
-                                                   alpha:1.0];
+    self.passwordField.textColor = [UIColor soundCloudLightGrey];
     self.passwordField.secureTextEntry = YES;
     self.passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
     self.passwordField.clearButtonMode = UITextFieldViewModeAlways;
@@ -152,18 +144,12 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    textField.textColor = [UIColor colorWithRed:0.6
-                                          green:0.6
-                                           blue:0.6
-                                          alpha:1.0];
+    textField.textColor = [UIColor soundCloudLightGrey];
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    textField.textColor = [UIColor colorWithRed:0.2
-                                          green:0.2
-                                           blue:0.2
-                                          alpha:1.0];
+    textField.textColor = [UIColor almostBlackColor];
     return YES;
 }
 
@@ -193,7 +179,9 @@ NSUInteger const kSCPasswordTextFieldTag = 1002;
         case kSCPasswordTextFieldTag:
             self.password = textField.text;
             [self.passwordField resignFirstResponder];
-//            [(SCLoginViewController *)self.superview login:nil];
+            if ([(SCLoginView *)self.superview respondsToSelector:@selector(login:)]) {
+                [(SCLoginView *)self.superview login:nil];
+            }
             break;
     }
 

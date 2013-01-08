@@ -27,7 +27,8 @@
 
 @property (nonatomic, assign) id<SCLoginViewProtocol> loginDelegate;
 @property (nonatomic, assign) SCCredentialsView *credentialsView;
-- (void)loadURL:(NSURL *)aURL;
+- (void)removeAllCookies;
+- (void)login:(id)sender;
 @end
 
 @protocol SCLoginViewProtocol <NSObject>
