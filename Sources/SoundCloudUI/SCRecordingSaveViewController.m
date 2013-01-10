@@ -1392,7 +1392,7 @@ const NSArray *allServices = nil;
     self.account = nil;
     [self showLoginView:YES];
     [SCSoundCloud requestAccessWithPreparedAuthorizationURLHandler:^(NSURL *preparedURL){
-        [self.loginView loadURL:preparedURL];
+        [self.loginView removeAllCookies];
     }];
 }
 
