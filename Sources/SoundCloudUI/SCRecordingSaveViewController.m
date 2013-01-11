@@ -28,6 +28,7 @@
 #import "UIColor+SoundCloudUI.h"
 #import "UIImage+SoundCloudUI.h"
 #import "QuartzCore+SoundCloudUI.h"
+#import "NSDictionary+SoundCloudUI.h"
 
 #import "SCUIErrors.h"
 
@@ -354,10 +355,10 @@ const NSArray *allServices = nil;
                                  
                                  anAccount.userInfo = result;
                                  
-                                 NSURL *avatarURL = [NSURL URLWithString:[result objectForKey:@"avatar_url"]];
+                                 NSURL *avatarURL = [NSURL URLWithString:[result objectForKeyOrNil:@"avatar_url"]];
                                  NSData *avatarData = [NSData dataWithContentsOfURL:avatarURL];
                                  [self.headerView setAvatarImage:[UIImage imageWithData:avatarData]];
-                                 [self.headerView setUserName:[result objectForKey:@"username"]];
+                                 [self.headerView setUserName:[result objectForKeyOrNil:@"username"]];
                                  
                              } else {
                                  NSLog(@"%s json error: %@", __FUNCTION__, [jsonError localizedDescription]);
@@ -427,7 +428,7 @@ const NSArray *allServices = nil;
     for (NSDictionary *connection in availableConnections) {
         NSDictionary *connectedService = nil;
         for (NSDictionary *unconnectedService in newUnconnectedServices) {
-            if ([[connection objectForKey:@"service"] isEqualToString:[unconnectedService objectForKey:@"service"]]) {
+            if ([[connection objectForKeyOrNil:@"service"] isEqualToString:[unconnectedService objectForKeyOrNil:@"service"]]) {
                 connectedService = unconnectedService;
             }
         }
@@ -584,10 +585,10 @@ const NSArray *allServices = nil;
     if (self.account) {
         NSDictionary *userInfo = self.account.userInfo;
         if (userInfo) {
-            NSURL *avatarURL = [NSURL URLWithString:[userInfo objectForKey:@"avatar_url"]];
+            NSURL *avatarURL = [NSURL URLWithString:[userInfo objectForKeyOrNil:@"avatar_url"]];
             NSData *avatarData = [NSData dataWithContentsOfURL:avatarURL];
             [self.headerView setAvatarImage:[UIImage imageWithData:avatarData]];
-            [self.headerView setUserName:[userInfo objectForKey:@"username"]];
+            [self.headerView setUserName:[userInfo objectForKeyOrNil:@"username"]];
         }
     } else {
         [self showLoginView:NO];
@@ -725,15 +726,15 @@ const NSArray *allServices = nil;
             
             NSDictionary *connection = [self.availableConnections objectAtIndex:indexPath.row];
             
-            cell.textLabel.text = [connection objectForKey:@"display_name"];
+            cell.textLabel.text = [connection objectForKeyOrNil:@"display_name"];
             
             SCSwitch *accessorySwitch = [[[SCSwitch alloc] init] autorelease];
             accessorySwitch.offBackgroundImage = [[SCBundle imageWithName:@"switch_gray"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
             
             accessorySwitch.on = NO;
             [self.sharingConnections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
-                if ([[obj objectForKey:@"id"] isEqual:[connection objectForKey:@"id"]]) {
-                    if (self.foursquareID || ![[connection objectForKey:@"service"] isEqualToString:@"foursquare"]) {
+                if ([[obj objectForKeyOrNil:@"id"] isEqual:[connection objectForKeyOrNil:@"id"]]) {
+                    if (self.foursquareID || ![[connection objectForKeyOrNil:@"service"] isEqualToString:@"foursquare"]) {
                         accessorySwitch.on = YES;
                     }
                     *stop = YES;
@@ -744,7 +745,7 @@ const NSArray *allServices = nil;
             
             cell.accessoryView = accessorySwitch;
             
-            cell.imageView.image = [SCBundle imageWithName:[NSString stringWithFormat:@"service_%@", [connection objectForKey:@"service"]]];
+            cell.imageView.image = [SCBundle imageWithName:[NSString stringWithFormat:@"service_%@", [connection objectForKeyOrNil:@"service"]]];
             
             [(SCTableCellBackgroundView *)cell.backgroundView setPosition:[aTableView cellPositionForIndexPath:indexPath]];
             
@@ -770,8 +771,8 @@ const NSArray *allServices = nil;
             }
             
             NSDictionary *service = [self.unconnectedServices objectAtIndex:indexPath.row - self.availableConnections.count];
-            cell.textLabel.text = [service objectForKey:@"displayName"];
-            cell.imageView.image = [SCBundle imageWithName:[NSString stringWithFormat:@"service_%@", [service objectForKey:@"service"]]];
+            cell.textLabel.text = [service objectForKeyOrNil:@"displayName"];
+            cell.imageView.image = [SCBundle imageWithName:[NSString stringWithFormat:@"service_%@", [service objectForKeyOrNil:@"service"]]];
             
             [(SCTableCellBackgroundView *)cell.backgroundView setPosition:[aTableView cellPositionForIndexPath:indexPath]];
             return cell;
@@ -894,8 +895,8 @@ const NSArray *allServices = nil;
     } else {
         if (indexPath.row >= availableConnections.count) {
             NSDictionary *service = [unconnectedServices objectAtIndex:indexPath.row - availableConnections.count];
-            SCAddConnectionViewController *controller = [[SCAddConnectionViewController alloc] initWithService:[service objectForKey:@"service"] account:account delegate:self];
-            controller.title = [NSString stringWithFormat:SCLocalizedString(@"sc_upload_connect_to", @"Connect %@"), [service objectForKey:@"displayName"]];
+            SCAddConnectionViewController *controller = [[SCAddConnectionViewController alloc] initWithService:[service objectForKeyOrNil:@"service"] account:account delegate:self];
+            controller.title = [NSString stringWithFormat:SCLocalizedString(@"sc_upload_connect_to", @"Connect %@"), [service objectForKeyOrNil:@"displayName"]];
             
             controller.modalPresentationStyle = UIModalPresentationFormSheet;
             [self.navigationController pushViewController:controller animated:YES];
@@ -1048,7 +1049,7 @@ const NSArray *allServices = nil;
                      }
                      
                      NSIndexSet *idxs = [availableConnections indexesOfObjectsPassingTest:^(id obj, NSUInteger i, BOOL *stop){
-                         if ([[obj objectForKey:@"service"] isEqual:service]) {
+                         if ([[obj objectForKeyOrNil:@"service"] isEqual:service]) {
                              *stop = YES;
                              return YES;
                          } else {
@@ -1080,7 +1081,7 @@ const NSArray *allServices = nil;
     NSDictionary *connection = [availableConnections objectAtIndex:indexPath.row];
     
     //If this is a foursquare switch, we don't have a venue and want to switch it on, display place picker
-    if ([[connection objectForKey:@"service"] isEqualToString:@"foursquare"] && !self.foursquareID && [sender isOn]) {
+    if ([[connection objectForKeyOrNil:@"service"] isEqualToString:@"foursquare"] && !self.foursquareID && [sender isOn]) {
         [self openPlacePicker];
     }
     
@@ -1089,7 +1090,7 @@ const NSArray *allServices = nil;
         [newSharingConnections addObject:connection];
     } else {
         NSIndexSet *idxs = [newSharingConnections indexesOfObjectsPassingTest:^(id obj, NSUInteger i, BOOL *stop){
-            if ([[obj objectForKey:@"id"] isEqual:[connection objectForKey:@"id"]]) {
+            if ([[obj objectForKeyOrNil:@"id"] isEqual:[connection objectForKeyOrNil:@"id"]]) {
                 *stop = YES;
                 return YES;
             } else {
@@ -1275,10 +1276,10 @@ const NSArray *allServices = nil;
         if (self.sharingConnections.count > 0) {
             NSMutableArray *idArray = [NSMutableArray arrayWithCapacity:self.sharingConnections.count];
             for (NSDictionary *sharingConnection in sharingConnections) {
-                if ([[sharingConnection objectForKey:@"service"] isEqualToString:@"foursquare"] && !self.foursquareID) {
+                if ([[sharingConnection objectForKeyOrNil:@"service"] isEqualToString:@"foursquare"] && !self.foursquareID) {
                     //Ignore Foursquare sharing when there is no venue ID set.
                 } else {
-                    [idArray addObject:[NSString stringWithFormat:@"%@", [sharingConnection objectForKey:@"id"]]];
+                    [idArray addObject:[NSString stringWithFormat:@"%@", [sharingConnection objectForKeyOrNil:@"id"]]];
                 }
             }
             [parameters setObject:idArray forKey:@"track[post_to][][id]"];
@@ -1294,7 +1295,7 @@ const NSArray *allServices = nil;
     }
     
     // App name
-    NSString * appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+    NSString * appName = [[[NSBundle mainBundle] infoDictionary] objectForKeyOrNil:@"CFBundleName"];
     
     // tags (location)
     NSMutableArray *tags = [NSMutableArray array];

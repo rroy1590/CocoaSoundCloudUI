@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20047C7A16A0280000C69F11 /* NSDictionary+SoundCloudUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 20047C7816A0280000C69F11 /* NSDictionary+SoundCloudUI.h */; };
+		20047C7B16A0280000C69F11 /* NSDictionary+SoundCloudUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 20047C7916A0280000C69F11 /* NSDictionary+SoundCloudUI.m */; };
 		20835E1A169502C4002D02A1 /* SCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6EF8CA713F92CF900B20B40 /* SCLoginViewController.m */; };
 		20C862BB16833789003523CF /* SCDrawing.h in Headers */ = {isa = PBXBuildFile; fileRef = 20C862B916833789003523CF /* SCDrawing.h */; };
 		20C862BC16833789003523CF /* SCDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 20C862BA16833789003523CF /* SCDrawing.m */; };
@@ -92,6 +94,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		20047C7816A0280000C69F11 /* NSDictionary+SoundCloudUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+SoundCloudUI.h"; sourceTree = "<group>"; };
+		20047C7916A0280000C69F11 /* NSDictionary+SoundCloudUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+SoundCloudUI.m"; sourceTree = "<group>"; };
 		20C862B916833789003523CF /* SCDrawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCDrawing.h; sourceTree = "<group>"; };
 		20C862BA16833789003523CF /* SCDrawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDrawing.m; sourceTree = "<group>"; };
 		20C862E0168353CC003523CF /* SCCredentialsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCCredentialsView.h; sourceTree = "<group>"; };
@@ -241,6 +245,8 @@
 				F62E0D46148FBD5700BE8F14 /* NSString+SoundCloudUI.m */,
 				F62E0D47148FBD5700BE8F14 /* QuartzCore+SoundCloudUI.h */,
 				F62E0D48148FBD5700BE8F14 /* QuartzCore+SoundCloudUI.m */,
+				20047C7816A0280000C69F11 /* NSDictionary+SoundCloudUI.h */,
+				20047C7916A0280000C69F11 /* NSDictionary+SoundCloudUI.m */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -513,6 +519,7 @@
 				20C862BB16833789003523CF /* SCDrawing.h in Headers */,
 				20C862E2168353CC003523CF /* SCCredentialsView.h in Headers */,
 				20C8632C16837491003523CF /* SCAlertView.h in Headers */,
+				20047C7A16A0280000C69F11 /* NSDictionary+SoundCloudUI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +646,7 @@
 				20C862E3168353CC003523CF /* SCCredentialsView.m in Sources */,
 				20C8632D16837491003523CF /* SCAlertView.m in Sources */,
 				20835E1A169502C4002D02A1 /* SCLoginViewController.m in Sources */,
+				20047C7B16A0280000C69F11 /* NSDictionary+SoundCloudUI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
