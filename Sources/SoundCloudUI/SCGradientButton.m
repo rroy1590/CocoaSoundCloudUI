@@ -75,6 +75,7 @@
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
+    self.alpha = highlighted ?:0.6;
     [self setNeedsDisplay];
 }
 
