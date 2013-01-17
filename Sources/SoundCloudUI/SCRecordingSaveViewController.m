@@ -69,6 +69,7 @@
 @property (nonatomic, retain) NSDate *trackCreationDate;
 @property (nonatomic, retain) NSArray *customTags;
 @property (nonatomic, retain) NSString *customSharingNote;
+@property (nonatomic, retain) NSDictionary *customParameters;
 
 @property (nonatomic, retain) CLLocation *location;
 @property (nonatomic, copy) NSString *locationTitle;
@@ -186,6 +187,7 @@ const NSArray *allServices = nil;
 @synthesize trackCreationDate;
 @synthesize customTags;
 @synthesize customSharingNote;
+@synthesize customParameters;
 
 @synthesize location;
 @synthesize locationTitle;
@@ -1158,6 +1160,17 @@ const NSArray *allServices = nil;
     }
 }
 
+/*
+    Please note that UIImagePickerController will throw a
+    UIApplicationInvalidInterfaceOrientation exception if your app does not
+    include portrait in UISupportedInterfaceOrientations (Info.plist).
+
+    For landscape only apps, we suggest enabling portrait orientation(s) in your
+    Info.plist and rejecting these in UIViewController's auto-rotation methods.
+    This way, you can be landscape only for your view controllers and still be
+    able to use UIImagePickerController. :)
+ */
+
 - (IBAction)openCameraPicker;
 {
     if (self.imagePickerPopoverController) {
@@ -1235,7 +1248,7 @@ const NSArray *allServices = nil;
     [self.view insertSubview:self.uploadProgressView belowSubview:self.toolBar];
     
     // set up request
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:self.customParameters];
     
     // track
     if (self.fileURL) {
@@ -1248,6 +1261,9 @@ const NSArray *allServices = nil;
     [parameters setObject:[self generatedTitle] forKey:@"track[title]"];
     [parameters setObject:(self.isPrivate) ? @"private" : @"public" forKey: @"track[sharing]"];
     [parameters setObject:(self.isDownloadable) ? @"1" : @"0" forKey: @"track[downloadable]"];
+    if ([self.customSharingNote length] > 0) {
+        [parameters setObject:self.customSharingNote forKey:@"track[sharing_note]"];	
+    }
     [parameters setObject:@"recording" forKey:@"track[track_type]"];
 
     // sharing
@@ -1376,7 +1392,7 @@ const NSArray *allServices = nil;
     self.account = nil;
     [self showLoginView:YES];
     [SCSoundCloud requestAccessWithPreparedAuthorizationURLHandler:^(NSURL *preparedURL){
-        [self.loginView loadURL:preparedURL];
+        [self.loginView removeAllCookies];
     }];
 }
 
