@@ -1,3 +1,6 @@
+## Readme
+Please see CocoaAPI wrapper [README](https://github.com/soundcloud/CocoaSoundCloudAPI/blob/master/README.md)
+
 ## CocoaPods
 [CocoaPods](http://cocoapods.org/) is a dependency manager for Xcode projects. 
 You can include this SDK by adding following lines to your `Podfile`:
@@ -8,7 +11,6 @@ pod 'CocoaSoundCloudUI', '1.0.5'
 ```
 
 and run the following command `pod install`.
-Please see CocoaAPI wrapper [README](https://github.com/soundcloud/CocoaSoundCloudAPI/blob/master/README.md)
 
 ## Contributing
 
