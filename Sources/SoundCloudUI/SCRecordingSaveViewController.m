@@ -51,7 +51,7 @@
 #define COVER_WIDTH 600.0
 
 
-@interface SCRecordingSaveViewController () <UIPopoverControllerDelegate>
+@interface SCRecordingSaveViewController () <UIScrollViewDelegate, UIPopoverControllerDelegate>
 
 #pragma mark Accessors
 @property (nonatomic, retain) NSArray *availableConnections;
@@ -1468,6 +1468,7 @@ const NSArray *allServices = nil;
                                        CGRectGetHeight(self.view.bounds) - 28.0 - CGRectGetHeight(self.toolBar.frame));
     
     self.loginView = [[[SCLoginView alloc] initWithFrame:loginViewFrame] autorelease];
+    self.loginView.contentSize = CGSizeMake(1.0, CGRectGetHeight(self.view.bounds));
     self.loginView.delegate = self;
     [self.view insertSubview:self.loginView belowSubview:self.toolBar];
     
@@ -1668,6 +1669,14 @@ const NSArray *allServices = nil;
     UIImage *finalImage = [scaledImage imagebyRotationToOrientation:originalOrientation];
     
     return finalImage;
+}
+
+#pragma mark -
+#pragma mark UIScrollView delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self.loginView setNeedsDisplay];
 }
 
 @end
