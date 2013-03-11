@@ -19,6 +19,7 @@
  */
 
 #import "UIViewController+SoundCloudUI.h"
+#import "SCAlertView.h"
 
 #import "JSONKit.h"
 #import "SCAPI.h"
@@ -1340,6 +1341,14 @@ const NSArray *allServices = nil;
                                                  
                                                  self.uploadProgressView.state = SCRecordingUploadProgressViewStateFailed;
                                                  [self.uploadProgressView setNeedsLayout];
+
+                                               [SCAlertView showAlertViewWithTitle:SCLocalizedString(@"upload_error", nil)
+                                                                         message:error.localizedDescription
+                                                               cancelButtonTitle:@"OK"
+                                                               otherButtonTitles:nil
+                                                                           block:^(NSInteger buttonIndex, BOOL didCancel) {
+                                                            }];
+
                                                  
                                                  // update tool bar
                                                  NSMutableArray *toolbarItems = [self.toolBar.items mutableCopy];
