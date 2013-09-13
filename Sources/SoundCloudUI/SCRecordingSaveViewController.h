@@ -56,6 +56,7 @@ typedef void(^SCRecordingSaveViewControllerCompletionHandler)(NSDictionary *trac
 - (void)setCreationDate:(NSDate *)aCreationDate;
 - (void)setTags:(NSArray *)someTags;
 - (void)setSharingNote:(NSString *)aSharingNote;
+- (void)setDescription:(NSString *)description;
 - (void)setCompletionHandler:(SCRecordingSaveViewControllerCompletionHandler)aCompletionHandler;
 - (void)setCustomParameters:(NSDictionary*)dictionary;
 

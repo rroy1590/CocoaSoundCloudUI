@@ -41,6 +41,7 @@ typedef void(^SCSharingViewControllerCompletionHandler)(NSDictionary *trackInfo,
 - (void)setTags:(NSArray *)someTags;
 - (void)setSharingNote:(NSString *)aSharingNote;
 - (void)setCustomParameters:(NSDictionary*)dictionary;
+- (void)setDescription:(NSString *)description;
 
 #pragma mark Foursquare
 

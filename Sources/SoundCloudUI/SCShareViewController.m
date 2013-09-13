@@ -106,6 +106,11 @@
     [self.recordSaveController setCustomParameters:dictionary];
 }
 
+- (void)setDescription:(NSString *)description
+{
+    [self.recordSaveController setDescription:description];
+}
+
 - (SCRecordingSaveViewController *)recordSaveController;
 {
     return (SCRecordingSaveViewController *)self.topViewController;
